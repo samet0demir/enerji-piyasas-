@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+npm-debug.log
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# Environment variables
+.env
+.env.local
+
+# Documentation - Except README
+*.md
+!README.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Database
+# *.db  # Commented out for GitHub Actions automation (we need to commit energy.db)
+*.db-shm
+*.db-wal
+
+# Logs
+# *.log  # Commented out for GitHub Actions artifacts (we want to see sync logs)
+
+# Claude Code settings (personal IDE configuration)
+.claude/
+
+# Documentation - Only keep README.md for GitHub
+*.md
+!README.md

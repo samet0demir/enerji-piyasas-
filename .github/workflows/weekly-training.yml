@@ -1,0 +1,85 @@
+name: Weekly Model Training
+
+on:
+  schedule:
+    # Her Pazar saat 00:00 UTC (03:00 Türkiye saati)
+    - cron: '0 0 * * 0'
+
+  # Manuel tetikleme için
+  workflow_dispatch:
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: requirements.txt
+
+      - name: Install Node.js dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create necessary directories
+        run: |
+          mkdir -p backend/logs
+          mkdir -p src/ml/models
+
+      - name: Run model training
+        working-directory: ./backend
+        run: |
+          echo "Starting weekly model training..."
+          npx tsx src/scripts/weeklyModelTraining.ts
+          echo "Training completed!"
+
+      - name: Check for model changes
+        id: git-check
+        run: |
+          git diff --exit-code src/ml/models/ || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/ml/models/
+          git add backend/logs/*.log
+          git commit -m "chore: weekly model training [skip ci]"
+          git push
+
+      - name: Upload logs as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-logs-${{ github.run_number }}
+          path: backend/logs/*.log
+          retention-days: 30
+
+      - name: Upload model as artifact
+        if: steps.git-check.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: prophet-model-${{ github.run_number }}
+          path: src/ml/models/prophet_model.json
+          retention-days: 90

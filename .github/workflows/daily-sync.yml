@@ -1,0 +1,66 @@
+name: Daily Data Sync
+
+on:
+  schedule:
+    # Her gün saat 23:00 UTC (02:00 Türkiye saati)
+    - cron: '0 23 * * *'
+
+  # Manuel tetikleme için
+  workflow_dispatch:
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Create logs directory
+        run: mkdir -p backend/logs
+
+      - name: Run catch-up data sync
+        working-directory: ./backend
+        env:
+          EPIAS_USERNAME: ${{ secrets.EPIAS_USERNAME }}
+          EPIAS_PASSWORD: ${{ secrets.EPIAS_PASSWORD }}
+        run: |
+          echo "Starting catch-up data sync..."
+          npx tsx src/scripts/catchUpSync.ts
+          echo "Catch-up sync completed!"
+
+      - name: Check for database changes
+        id: git-check
+        run: |
+          git diff --exit-code backend/data/energy.db || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add backend/data/energy.db
+          git add backend/logs/*.log
+          git commit -m "chore: auto-sync EPİAŞ data [skip ci]"
+          git push
+
+      - name: Upload logs as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-logs-${{ github.run_number }}
+          path: backend/logs/*.log
+          retention-days: 7

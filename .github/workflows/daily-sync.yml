@@ -42,10 +42,19 @@ jobs:
           npx tsx src/scripts/catchUpSync.ts
           echo "Catch-up sync completed!"
 
+      - name: Stage database changes
+        run: |
+          git add backend/data/energy.db
+
       - name: Check for database changes
         id: git-check
         run: |
-          git diff --exit-code backend/data/energy.db || echo "changed=true" >> $GITHUB_OUTPUT
+          if ! git diff --cached --exit-code backend/data/energy.db > /dev/null 2>&1; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Database has changes, will commit"
+          else
+            echo "No database changes detected"
+          fi
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changed == 'true'

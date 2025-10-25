@@ -32,6 +32,13 @@ jobs:
       - name: Create logs directory
         run: mkdir -p backend/logs
 
+      - name: Save database hash before sync
+        id: hash-before
+        run: |
+          HASH_BEFORE=$(md5sum backend/data/energy.db | awk '{print $1}')
+          echo "hash=$HASH_BEFORE" >> $GITHUB_OUTPUT
+          echo "📊 Database hash before sync: $HASH_BEFORE"
+
       - name: Run catch-up data sync
         working-directory: ./backend
         env:
@@ -42,18 +49,23 @@ jobs:
           npx tsx src/scripts/catchUpSync.ts
           echo "Catch-up sync completed!"
 
-      - name: Stage database changes
+      - name: Save database hash after sync
+        id: hash-after
         run: |
-          git add backend/data/energy.db
+          HASH_AFTER=$(md5sum backend/data/energy.db | awk '{print $1}')
+          echo "hash=$HASH_AFTER" >> $GITHUB_OUTPUT
+          echo "📊 Database hash after sync: $HASH_AFTER"
 
       - name: Check for database changes
         id: git-check
         run: |
-          if ! git diff --cached --exit-code backend/data/energy.db > /dev/null 2>&1; then
+          if [ "${{ steps.hash-before.outputs.hash }}" != "${{ steps.hash-after.outputs.hash }}" ]; then
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "Database has changes, will commit"
+            echo "✅ Database changed! (hash mismatch)"
+            echo "Before: ${{ steps.hash-before.outputs.hash }}"
+            echo "After: ${{ steps.hash-after.outputs.hash }}"
           else
-            echo "No database changes detected"
+            echo "No database changes detected (hash identical)"
           fi
 
       - name: Commit and push changes
@@ -62,9 +74,10 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add backend/data/energy.db
-          git add backend/logs/*.log
+          git add backend/logs/*.log || true
           git commit -m "chore: auto-sync EPİAŞ data [skip ci]"
           git push
+          echo "✅ Changes committed and pushed successfully"
 
       - name: Upload logs as artifact
         if: always()

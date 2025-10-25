@@ -59,14 +59,21 @@ jobs:
       - name: Check for database changes
         id: git-check
         run: |
+          echo "🔍 Comparing hashes..."
+          echo "HASH_BEFORE = ${{ steps.hash-before.outputs.hash }}"
+          echo "HASH_AFTER  = ${{ steps.hash-after.outputs.hash }}"
+
           if [ "${{ steps.hash-before.outputs.hash }}" != "${{ steps.hash-after.outputs.hash }}" ]; then
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "✅ Database changed! (hash mismatch)"
             echo "Before: ${{ steps.hash-before.outputs.hash }}"
             echo "After: ${{ steps.hash-after.outputs.hash }}"
           else
-            echo "No database changes detected (hash identical)"
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "❌ No database changes detected (hash identical)"
           fi
+
+          echo "🎯 Changed output: ${{ steps.git-check.outputs.changed }}"
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changed == 'true'

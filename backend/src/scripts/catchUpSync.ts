@@ -197,6 +197,11 @@ async function catchUpSync() {
     log(`❌ HATA: ${error}`);
     throw error;
   } finally {
+    // WAL checkpoint - Değişiklikleri ana DB dosyasına yaz
+    log('🔄 WAL checkpoint yapiliyor (degisiklikleri DB dosyasina yazma)...');
+    db.pragma('wal_checkpoint(TRUNCATE)');
+    log('✅ WAL checkpoint tamamlandi');
+
     db.close();
   }
 }

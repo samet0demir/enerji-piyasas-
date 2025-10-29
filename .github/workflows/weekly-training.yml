@@ -2,8 +2,9 @@ name: Weekly Model Training
 
 on:
   schedule:
-    # Her Pazar saat 00:00 UTC (03:00 Türkiye saati)
-    - cron: '0 0 * * 0'
+    # Her Pazartesi saat 00:00 UTC (03:00 Türkiye saati)
+    # Pazar 23:59 biter → Pazartesi 00:00 başlar → 03:00'da workflow çalışır
+    - cron: '0 0 * * 1'
 
   # Manuel tetikleme için
   workflow_dispatch:
@@ -53,20 +54,27 @@ jobs:
           npx tsx src/scripts/weeklyModelTraining.ts
           echo "Training completed!"
 
-      - name: Check for model changes
+      - name: Check for changes
         id: git-check
         run: |
-          git diff --exit-code src/ml/models/ || echo "changed=true" >> $GITHUB_OUTPUT
+          git add backend/data/energy.db
+          git add backend/models/
+          git add backend/public/forecasts.json
+          git add backend/logs/*.log || true
+          git diff --cached --exit-code || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changed == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add src/ml/models/
-          git add backend/logs/*.log
-          git commit -m "chore: weekly model training [skip ci]"
+
+          # Remote'tan son değişiklikleri çek (eğer başka commit varsa)
+          git pull --rebase origin main || echo "No remote changes to pull"
+
+          git commit -m "chore: weekly forecast cycle [skip ci]"
           git push
+          echo "✅ Changes committed and pushed successfully"
 
       - name: Upload logs as artifact
         if: always()
@@ -81,5 +89,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: prophet-model-${{ github.run_number }}
-          path: src/ml/models/prophet_model.json
+          path: backend/src/ml/models/prophet_model.json
           retention-days: 90

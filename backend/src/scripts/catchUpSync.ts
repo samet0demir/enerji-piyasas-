@@ -45,7 +45,24 @@ function getLastDate(db: Database.Database): string | null {
 }
 
 /**
- * İki tarih arasındaki günleri hesaplar
+ * İki tarih arasındaki günleri hesaplar (end date DAHİL)
+ */
+function getDaysBetweenInclusive(startDate: string, endDate: string): string[] {
+  const days: string[] = [];
+  const current = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Son günü de dahil et
+  while (current <= end) {
+    days.push(current.toISOString().split('T')[0]);
+    current.setDate(current.getDate() + 1);
+  }
+
+  return days;
+}
+
+/**
+ * İki tarih arasındaki günleri hesaplar (end date DAHİL DEĞİL)
  */
 function getDaysBetween(startDate: string, endDate: string): string[] {
   const days: string[] = [];
@@ -99,15 +116,17 @@ async function catchUpSync() {
     startDate.setDate(startDate.getDate() + 1);
     const startDateStr = startDate.toISOString().split('T')[0];
 
-    // 3. Bugünün tarihini al (ama bugünü dahil etme, çünkü henüz tamamlanmamış)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString().split('T')[0];
+    // 3. Dünün tarihini al (EPİAŞ verileri bir önceki günün 23:00'ına kadar hazır)
+    // Workflow gece 02:00'de çalışıyorsa, bir önceki günün tüm verileri mevcut
+    // NOT: UTC ile çalış çünkü database UTC saklıyor
+    const now = new Date();
+    const yesterdayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1));
+    const yesterdayStr = yesterdayUTC.toISOString().split('T')[0];
 
-    log(`Kontrol araligi: ${startDateStr} - ${todayStr}`);
+    log(`Kontrol araligi: ${startDateStr} - ${yesterdayStr} (dahil)`);
 
-    // 4. Eksik günleri hesapla
-    const missingDays = getDaysBetween(startDateStr, todayStr);
+    // 4. Eksik günleri hesapla (dün dahil!)
+    const missingDays = getDaysBetweenInclusive(startDateStr, yesterdayStr);
 
     if (missingDays.length === 0) {
       log('✅ Eksik gun yok! Database guncel.');

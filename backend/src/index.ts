@@ -15,6 +15,7 @@ dotenv.config();
 // Services (dotenv.config()'den sonra import et)
 import { fetchMCP, fetch2YearsData, fetchGeneration, fetchGenerationInChunks, fetchConsumption } from './services/epiasClient.js';
 import {
+  db,
   initDatabase,
   insertMCPData,
   insertGenerationData,
@@ -347,6 +348,171 @@ app.get('/api/mcp/query', (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'Failed to query MCP data',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Son 48 saatlik MCP verilerini getir (frontend için)
+app.get('/api/latest', (req: Request, res: Response) => {
+  try {
+    // Son 48 saatlik veriyi çek
+    const query = db.prepare(`
+      SELECT date, hour, price, price_usd, price_eur
+      FROM mcp_data
+      WHERE date >= datetime('now', '-2 days')
+      ORDER BY date ASC
+    `);
+
+    const data = query.all();
+
+    res.status(200).json({
+      success: true,
+      count: data.length,
+      mcp: data
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch latest data',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Haftalık performans trendini getir (frontend için)
+app.get('/api/weekly-performance', (req: Request, res: Response) => {
+  try {
+    // Son 8 haftalık performansı çek
+    const query = db.prepare(`
+      SELECT
+        week_start,
+        week_end,
+        mape,
+        mae,
+        rmse,
+        total_predictions,
+        created_at
+      FROM weekly_performance
+      ORDER BY week_start DESC
+      LIMIT 8
+    `);
+
+    const performance = query.all();
+
+    res.status(200).json({
+      success: true,
+      count: performance.length,
+      data: performance
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch weekly performance',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Haftalık tahmin geçmişini getir (frontend için)
+app.get('/api/forecast-history/:week_start', (req: Request, res: Response) => {
+  try {
+    const { week_start } = req.params;
+
+    const query = db.prepare(`
+      SELECT
+        forecast_datetime,
+        predicted_price,
+        actual_price,
+        absolute_error,
+        percentage_error
+      FROM forecast_history
+      WHERE week_start = ?
+      ORDER BY forecast_datetime ASC
+    `);
+
+    const forecasts = query.all(week_start);
+
+    res.status(200).json({
+      success: true,
+      week_start: week_start,
+      count: forecasts.length,
+      forecasts: forecasts
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch forecast history',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Üretim verileri (Generation) - Son 7 gün
+app.get('/api/generation/recent', (req: Request, res: Response) => {
+  try {
+    const query = db.prepare(`
+      SELECT
+        date,
+        hour,
+        total,
+        solar,
+        wind,
+        hydro,
+        natural_gas,
+        lignite,
+        geothermal,
+        biomass
+      FROM generation_data
+      WHERE date >= datetime('now', '-7 days')
+      ORDER BY date ASC, hour ASC
+    `);
+
+    const data = query.all();
+
+    res.status(200).json({
+      success: true,
+      count: data.length,
+      generation: data
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch generation data',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Tüketim verileri (Consumption) - Son 7 gün
+app.get('/api/consumption/recent', (req: Request, res: Response) => {
+  try {
+    const query = db.prepare(`
+      SELECT
+        date,
+        hour,
+        consumption
+      FROM consumption_data
+      WHERE date >= datetime('now', '-7 days')
+      ORDER BY date ASC, hour ASC
+    `);
+
+    const data = query.all();
+
+    res.status(200).json({
+      success: true,
+      count: data.length,
+      consumption: data
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch consumption data',
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   }

@@ -25,26 +25,45 @@ import os
 DB_PATH = os.path.join(os.path.dirname(__file__), '../../data/energy.db')
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '../../models/prophet_model.json')
 
-def load_data_from_db():
+def load_data_from_db(end_date=None):
     """
     SQLite veri tabanından MCP verilerini yükler
+
+    Args:
+        end_date (str, optional): Bu tarihe KADAR veri yükle (dahil değil!).
+                                  Format: 'YYYY-MM-DD' veya 'YYYY-MM-DD HH:MM:SS'
+                                  None ise tüm veriyi yükler.
     Returns:
         pd.DataFrame: 'ds' (tarih-saat) ve 'y' (fiyat) kolonları
     """
     print("[*] Veri tabanından MCP verileri yükleniyor...")
 
+    if end_date:
+        print(f"[*] Data leakage önleme: {end_date} tarihine KADAR veri kullanılacak (dahil değil)")
+
     conn = sqlite3.connect(DB_PATH)
 
     # MCP verilerini çek (date kolonu zaten ISO8601 formatında tam tarih-saat içeriyor)
-    query = """
-        SELECT
-            date as ds,
-            price as y
-        FROM mcp_data
-        ORDER BY date
-    """
+    if end_date:
+        query = """
+            SELECT
+                date as ds,
+                price as y
+            FROM mcp_data
+            WHERE date < ?
+            ORDER BY date
+        """
+        df = pd.read_sql_query(query, conn, params=[end_date])
+    else:
+        query = """
+            SELECT
+                date as ds,
+                price as y
+            FROM mcp_data
+            ORDER BY date
+        """
+        df = pd.read_sql_query(query, conn)
 
-    df = pd.read_sql_query(query, conn)
     conn.close()
 
     # Tarih formatını düzelt ve timezone kaldır (Prophet timezone desteklemiyor)
@@ -229,14 +248,20 @@ def save_model(model):
 
     print("[+] Model basariyla kaydedildi!")
 
-def main():
-    """Ana eğitim fonksiyonu"""
+def main(end_date=None):
+    """
+    Ana eğitim fonksiyonu
+
+    Args:
+        end_date (str, optional): Bu tarihe KADAR veri kullan (dahil değil!)
+                                  Format: 'YYYY-MM-DD'
+    """
     print("="*60)
     print("EPIAS MCP Fiyat Tahmini - Prophet Model Egitimi")
     print("="*60)
 
     # 1. Veri yükleme
-    df = load_data_from_db()
+    df = load_data_from_db(end_date=end_date)
 
     # 2. Tatil günlerini oluştur
     holidays = create_turkish_holidays()
@@ -259,5 +284,11 @@ def main():
     print(f"   - Model dosyasi: {MODEL_PATH}")
     print("="*60)
 
+    return model, mae, rmse, mape
+
 if __name__ == "__main__":
-    main()
+    import sys
+    # Komut satırından end_date parametresi al
+    # Kullanım: python train_prophet.py 2025-10-20
+    end_date = sys.argv[1] if len(sys.argv) > 1 else None
+    main(end_date=end_date)

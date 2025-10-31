@@ -27,36 +27,53 @@ async function getTGT(): Promise<string> {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        },
+        maxRedirects: 0, // 201 + Location header'ını yakalamak için redirect takip etme
+        validateStatus: (status) => status >= 200 && status < 400 // 201, 302 gibi durumlara izin ver
       }
     );
 
-    // DEBUG: EPİAŞ'tan gelen yanıtı detaylı logla
     console.log('🔍 EPİAŞ LOGIN STATUS:', response.status);
-    console.log('🔍 EPİAŞ LOGIN HEADERS:', JSON.stringify(response.headers, null, 2));
 
-    if (response && response.data) {
-      if (typeof response.data === 'string') {
-        console.log('🔍 EPİAŞ LOGIN BODY (string - first 200 chars):', response.data.slice(0, 200));
+    // TGT token'ı bul (Location header veya body'den)
+    let tgt: string | null = null;
+
+    // 1) Öncelikle Location header'dan TGT- pattern'ini ara
+    if (response.headers && response.headers.location) {
+      const locationHeader = String(response.headers.location);
+      console.log('🔍 Location header:', locationHeader);
+      const match = locationHeader.match(/TGT-[A-Za-z0-9\-]+/);
+      if (match) {
+        tgt = match[0];
+        console.log('✅ Found TGT in Location header:', tgt);
       } else {
-        console.log('🔍 EPİAŞ LOGIN BODY KEYS:', Object.keys(response.data));
-        try {
-          const jsonStr = JSON.stringify(response.data);
-          console.log('🔍 EPİAŞ LOGIN BODY LENGTH:', jsonStr.length);
-          console.log('🔍 EPİAŞ LOGIN BODY (first 1000 chars):', jsonStr.slice(0, 1000));
-        } catch(e) {
-          console.log('🔍 EPİAŞ login stringify error:', e);
-        }
+        console.log('⚠️ Location header var ama TGT pattern bulunamadı');
       }
-    } else {
-      console.log('🔍 EPİAŞ login returned EMPTY BODY');
     }
 
-    // Response JSON formatında: { tgt: "TGT-xxx...", created: "...", code: 201 }
-    const tgt = response.data.tgt;
+    // 2) Eğer Location'da bulamadıysak, body'den ara
+    if (!tgt && response.data) {
+      const bodyStr = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+      console.log('🔍 EPİAŞ LOGIN BODY (preview):', bodyStr.slice(0, 300));
 
+      const match = bodyStr.match(/TGT-[A-Za-z0-9\-]+/);
+      if (match) {
+        tgt = match[0];
+        console.log('✅ Found TGT in body:', tgt);
+      }
+    }
+
+    // 3) TGT bulunamadıysa hata fırlat
     if (!tgt) {
-      console.error('❌ TGT field not found. Available fields:', Object.keys(response.data || {}));
+      console.error('❌ TGT token not found in response');
+      console.error('Headers:', JSON.stringify(response.headers, null, 2));
+      console.error('Body type:', typeof response.data);
+      if (response.data) {
+        const preview = typeof response.data === 'string'
+          ? response.data.slice(0, 500)
+          : JSON.stringify(response.data).slice(0, 500);
+        console.error('Body preview:', preview);
+      }
       throw new Error('TGT token not found in response');
     }
 

@@ -93,6 +93,46 @@ export function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_consumption_date_hour ON consumption_data(date, hour);
   `);
 
+  // Tahmin Geçmişi (Forecast History) tablosu
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS forecast_history (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      week_start DATE NOT NULL,
+      week_end DATE NOT NULL,
+      forecast_datetime TEXT NOT NULL,
+      predicted_price REAL NOT NULL,
+      actual_price REAL,
+      absolute_error REAL,
+      percentage_error REAL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(week_start, forecast_datetime)
+    )
+  `);
+
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_forecast_week ON forecast_history(week_start, week_end);
+    CREATE INDEX IF NOT EXISTS idx_forecast_datetime ON forecast_history(forecast_datetime);
+  `);
+
+  // Haftalık Performans (Weekly Performance) tablosu
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS weekly_performance (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      week_start DATE NOT NULL,
+      week_end DATE NOT NULL,
+      mape REAL NOT NULL,
+      mae REAL NOT NULL,
+      rmse REAL NOT NULL,
+      total_predictions INTEGER NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(week_start)
+    )
+  `);
+
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_weekly_perf_week ON weekly_performance(week_start);
+  `);
+
   console.log('✅ Database initialized successfully');
 }
 

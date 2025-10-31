@@ -12,12 +12,14 @@ import pandas as pd
 import numpy as np
 from prophet.serialize import model_from_json
 import matplotlib.pyplot as plt
+import sqlite3
 import os
 from datetime import datetime, timedelta
 
-# Model yolu
+# Model ve database yolu
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '../../models/prophet_model.json')
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '../../models')
+DB_PATH = os.path.join(os.path.dirname(__file__), '../../data/energy.db')
 
 def load_model():
     """Eğitilmiş Prophet modelini yükler"""
@@ -135,6 +137,44 @@ def save_forecast_csv(forecast, days=7):
     export_data.to_csv(csv_path, index=False, encoding='utf-8')
 
     print(f"[+] CSV kaydedildi: {csv_path}")
+
+def save_forecast_to_db(forecast, week_start, week_end):
+    """
+    Tahminleri forecast_history tablosuna kaydeder
+
+    Args:
+        forecast: Tahmin dataframe'i
+        week_start (str): Haftanın başlangıcı (Pazartesi) - Format: 'YYYY-MM-DD'
+        week_end (str): Haftanın bitişi (Pazar) - Format: 'YYYY-MM-DD'
+    """
+    print(f"\n[*] Tahminler database'e kaydediliyor...")
+    print(f"   Hafta: {week_start} - {week_end}")
+
+    conn = sqlite3.connect(DB_PATH)
+
+    # Önce bu hafta için eski kayıtları sil (varsa)
+    delete_query = "DELETE FROM forecast_history WHERE week_start = ?"
+    conn.execute(delete_query, (week_start,))
+
+    # Yeni tahminleri ekle
+    insert_query = """
+        INSERT INTO forecast_history (week_start, week_end, forecast_datetime, predicted_price)
+        VALUES (?, ?, ?, ?)
+    """
+
+    inserted = 0
+    for _, row in forecast.iterrows():
+        # Tarihi string'e çevir (timezone'suz)
+        forecast_dt = row['ds'].strftime('%Y-%m-%d %H:%M:%S')
+        predicted = float(row['yhat'])
+
+        conn.execute(insert_query, (week_start, week_end, forecast_dt, predicted))
+        inserted += 1
+
+    conn.commit()
+    conn.close()
+
+    print(f"[+] {inserted} tahmin kaydı database'e eklendi")
 
 def print_summary(forecast, daily_avg):
     """

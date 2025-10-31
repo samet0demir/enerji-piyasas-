@@ -1,0 +1,7 @@
+[dotenv@17.2.3] injecting env (8) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+📦 Initializing database...
+✅ Database initialized successfully
+📁 Serving static files from: C:\Users\demir\OneDrive\Masaüstü\enerji\backend\public
+🚀 Backend server is running at http://localhost:5001
+[*] 7 günlük tahmin istendi...
+[+] 7 günlük tahmin tamamlandı (168 saat)

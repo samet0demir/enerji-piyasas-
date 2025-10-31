@@ -1,4 +1,6 @@
 prophet==1.1.5
+pystan==2.19.1.1
+cmdstanpy==1.2.2
 pandas==2.2.0
 numpy==1.26.3
 python-dotenv==1.0.0

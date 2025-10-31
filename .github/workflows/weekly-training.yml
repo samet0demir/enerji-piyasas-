@@ -52,7 +52,7 @@ jobs:
         working-directory: ./backend
         run: |
           echo "Starting weekly model training..."
-          npx tsx src/scripts/weeklyModelTraining.ts
+          python src/ml/weekly_workflow.py
           echo "Training completed!"
 
       - name: Check for changes

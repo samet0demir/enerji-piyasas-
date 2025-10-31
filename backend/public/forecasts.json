@@ -1,847 +1,847 @@
 {
-  "generated_at": "2025-10-28T20:46:48.435107",
+  "generated_at": "2025-10-31T12:25:09.716788",
   "current_week": {
     "start": "2025-10-27",
     "end": "2025-11-02",
     "forecasts": [
       {
         "datetime": "2025-10-27 00:00:00",
-        "predicted": 2610.31,
+        "predicted": 2612.22,
         "actual": null
       },
       {
         "datetime": "2025-10-27 01:00:00",
-        "predicted": 2595.49,
+        "predicted": 2597.41,
         "actual": null
       },
       {
         "datetime": "2025-10-27 02:00:00",
-        "predicted": 2564.45,
+        "predicted": 2566.36,
         "actual": null
       },
       {
         "datetime": "2025-10-27 03:00:00",
-        "predicted": 2499.54,
+        "predicted": 2501.46,
         "actual": null
       },
       {
         "datetime": "2025-10-27 04:00:00",
-        "predicted": 2436.64,
+        "predicted": 2438.55,
         "actual": null
       },
       {
         "datetime": "2025-10-27 05:00:00",
-        "predicted": 2440.71,
+        "predicted": 2442.63,
         "actual": null
       },
       {
         "datetime": "2025-10-27 06:00:00",
-        "predicted": 2543.11,
+        "predicted": 2545.03,
         "actual": null
       },
       {
         "datetime": "2025-10-27 07:00:00",
-        "predicted": 2696.46,
+        "predicted": 2698.39,
         "actual": null
       },
       {
         "datetime": "2025-10-27 08:00:00",
-        "predicted": 2794.26,
+        "predicted": 2796.19,
         "actual": null
       },
       {
         "datetime": "2025-10-27 09:00:00",
-        "predicted": 2747.35,
+        "predicted": 2749.28,
         "actual": null
       },
       {
         "datetime": "2025-10-27 10:00:00",
-        "predicted": 2557.07,
+        "predicted": 2559.01,
         "actual": null
       },
       {
         "datetime": "2025-10-27 11:00:00",
-        "predicted": 2324.13,
+        "predicted": 2326.07,
         "actual": null
       },
       {
         "datetime": "2025-10-27 12:00:00",
-        "predicted": 2184.46,
+        "predicted": 2186.4,
         "actual": null
       },
       {
         "datetime": "2025-10-27 13:00:00",
-        "predicted": 2223.1,
+        "predicted": 2225.05,
         "actual": null
       },
       {
         "datetime": "2025-10-27 14:00:00",
-        "predicted": 2430.94,
+        "predicted": 2432.89,
         "actual": null
       },
       {
         "datetime": "2025-10-27 15:00:00",
-        "predicted": 2728.5,
+        "predicted": 2730.45,
         "actual": null
       },
       {
         "datetime": "2025-10-27 16:00:00",
-        "predicted": 3025.36,
+        "predicted": 3027.31,
         "actual": null
       },
       {
         "datetime": "2025-10-27 17:00:00",
-        "predicted": 3263.6,
+        "predicted": 3265.56,
         "actual": null
       },
       {
         "datetime": "2025-10-27 18:00:00",
-        "predicted": 3420.68,
+        "predicted": 3422.64,
         "actual": null
       },
       {
         "datetime": "2025-10-27 19:00:00",
-        "predicted": 3489.73,
+        "predicted": 3491.69,
         "actual": null
       },
       {
         "datetime": "2025-10-27 20:00:00",
-        "predicted": 3470.02,
+        "predicted": 3471.98,
         "actual": null
       },
       {
         "datetime": "2025-10-27 21:00:00",
-        "predicted": 3377.0,
+        "predicted": 3378.97,
         "actual": null
       },
       {
         "datetime": "2025-10-27 22:00:00",
-        "predicted": 3251.19,
+        "predicted": 3253.16,
         "actual": null
       },
       {
         "datetime": "2025-10-27 23:00:00",
-        "predicted": 3142.55,
+        "predicted": 3144.52,
         "actual": null
       },
       {
         "datetime": "2025-10-28 00:00:00",
-        "predicted": 3076.3,
+        "predicted": 3078.29,
         "actual": null
       },
       {
         "datetime": "2025-10-28 01:00:00",
-        "predicted": 3033.54,
+        "predicted": 3035.53,
         "actual": null
       },
       {
         "datetime": "2025-10-28 02:00:00",
-        "predicted": 2972.28,
+        "predicted": 2974.26,
         "actual": null
       },
       {
         "datetime": "2025-10-28 03:00:00",
-        "predicted": 2875.21,
+        "predicted": 2877.2,
         "actual": null
       },
       {
         "datetime": "2025-10-28 04:00:00",
-        "predicted": 2778.57,
+        "predicted": 2780.56,
         "actual": null
       },
       {
         "datetime": "2025-10-28 05:00:00",
-        "predicted": 2747.69,
+        "predicted": 2749.67,
         "actual": null
       },
       {
         "datetime": "2025-10-28 06:00:00",
-        "predicted": 2814.28,
+        "predicted": 2816.26,
         "actual": null
       },
       {
         "datetime": "2025-10-28 07:00:00",
-        "predicted": 2931.35,
+        "predicted": 2933.32,
         "actual": null
       },
       {
         "datetime": "2025-10-28 08:00:00",
-        "predicted": 2992.75,
+        "predicted": 2994.72,
         "actual": null
       },
       {
         "datetime": "2025-10-28 09:00:00",
-        "predicted": 2909.69,
+        "predicted": 2911.65,
         "actual": null
       },
       {
         "datetime": "2025-10-28 10:00:00",
-        "predicted": 2683.87,
+        "predicted": 2685.83,
         "actual": null
       },
       {
         "datetime": "2025-10-28 11:00:00",
-        "predicted": 2416.33,
+        "predicted": 2418.29,
         "actual": null
       },
       {
         "datetime": "2025-10-28 12:00:00",
-        "predicted": 2243.33,
+        "predicted": 2245.28,
         "actual": null
       },
       {
         "datetime": "2025-10-28 13:00:00",
-        "predicted": 2250.2,
+        "predicted": 2252.14,
         "actual": null
       },
       {
         "datetime": "2025-10-28 14:00:00",
-        "predicted": 2428.12,
+        "predicted": 2430.06,
         "actual": null
       },
       {
         "datetime": "2025-10-28 15:00:00",
-        "predicted": 2697.85,
+        "predicted": 2699.77,
         "actual": null
       },
       {
         "datetime": "2025-10-28 16:00:00",
-        "predicted": 2969.2,
+        "predicted": 2971.11,
         "actual": null
       },
       {
         "datetime": "2025-10-28 17:00:00",
-        "predicted": 3184.44,
+        "predicted": 3186.35,
         "actual": null
       },
       {
         "datetime": "2025-10-28 18:00:00",
-        "predicted": 3321.17,
+        "predicted": 3323.07,
         "actual": null
       },
       {
         "datetime": "2025-10-28 19:00:00",
-        "predicted": 3372.66,
+        "predicted": 3374.56,
         "actual": null
       },
       {
         "datetime": "2025-10-28 20:00:00",
-        "predicted": 3338.26,
+        "predicted": 3340.15,
         "actual": null
       },
       {
         "datetime": "2025-10-28 21:00:00",
-        "predicted": 3233.49,
+        "predicted": 3235.36,
         "actual": null
       },
       {
         "datetime": "2025-10-28 22:00:00",
-        "predicted": 3098.86,
+        "predicted": 3100.73,
         "actual": null
       },
       {
         "datetime": "2025-10-28 23:00:00",
-        "predicted": 2984.32,
+        "predicted": 2986.19,
         "actual": null
       },
       {
         "datetime": "2025-10-29 00:00:00",
-        "predicted": 2881.82,
+        "predicted": 2884.59,
         "actual": null
       },
       {
         "datetime": "2025-10-29 01:00:00",
-        "predicted": 2838.82,
+        "predicted": 2841.59,
         "actual": null
       },
       {
         "datetime": "2025-10-29 02:00:00",
-        "predicted": 2779.97,
+        "predicted": 2782.74,
         "actual": null
       },
       {
         "datetime": "2025-10-29 03:00:00",
-        "predicted": 2687.86,
+        "predicted": 2690.62,
         "actual": null
       },
       {
         "datetime": "2025-10-29 04:00:00",
-        "predicted": 2598.52,
+        "predicted": 2601.27,
         "actual": null
       },
       {
         "datetime": "2025-10-29 05:00:00",
-        "predicted": 2577.08,
+        "predicted": 2579.82,
         "actual": null
       },
       {
         "datetime": "2025-10-29 06:00:00",
-        "predicted": 2655.05,
+        "predicted": 2657.78,
         "actual": null
       },
       {
         "datetime": "2025-10-29 07:00:00",
-        "predicted": 2785.18,
+        "predicted": 2787.91,
         "actual": null
       },
       {
         "datetime": "2025-10-29 08:00:00",
-        "predicted": 2861.09,
+        "predicted": 2863.81,
         "actual": null
       },
       {
         "datetime": "2025-10-29 09:00:00",
-        "predicted": 2793.71,
+        "predicted": 2796.42,
         "actual": null
       },
       {
         "datetime": "2025-10-29 10:00:00",
-        "predicted": 2584.48,
+        "predicted": 2587.19,
         "actual": null
       },
       {
         "datetime": "2025-10-29 11:00:00",
-        "predicted": 2334.15,
+        "predicted": 2336.86,
         "actual": null
       },
       {
         "datetime": "2025-10-29 12:00:00",
-        "predicted": 2178.71,
+        "predicted": 2181.41,
         "actual": null
       },
       {
         "datetime": "2025-10-29 13:00:00",
-        "predicted": 2203.22,
+        "predicted": 2205.91,
         "actual": null
       },
       {
         "datetime": "2025-10-29 14:00:00",
-        "predicted": 2398.58,
+        "predicted": 2401.26,
         "actual": null
       },
       {
         "datetime": "2025-10-29 15:00:00",
-        "predicted": 2685.29,
+        "predicted": 2687.97,
         "actual": null
       },
       {
         "datetime": "2025-10-29 16:00:00",
-        "predicted": 2972.93,
+        "predicted": 2975.6,
         "actual": null
       },
       {
         "datetime": "2025-10-29 17:00:00",
-        "predicted": 3203.52,
+        "predicted": 3206.19,
         "actual": null
       },
       {
         "datetime": "2025-10-29 18:00:00",
-        "predicted": 3354.47,
+        "predicted": 3357.14,
         "actual": null
       },
       {
         "datetime": "2025-10-29 19:00:00",
-        "predicted": 3418.85,
+        "predicted": 3421.51,
         "actual": null
       },
       {
         "datetime": "2025-10-29 20:00:00",
-        "predicted": 3395.84,
+        "predicted": 3398.5,
         "actual": null
       },
       {
         "datetime": "2025-10-29 21:00:00",
-        "predicted": 3300.82,
+        "predicted": 3303.47,
         "actual": null
       },
       {
         "datetime": "2025-10-29 22:00:00",
-        "predicted": 3174.18,
+        "predicted": 3176.83,
         "actual": null
       },
       {
         "datetime": "2025-10-29 23:00:00",
-        "predicted": 3065.8,
+        "predicted": 3068.44,
         "actual": null
       },
       {
         "datetime": "2025-10-30 00:00:00",
-        "predicted": 3034.01,
+        "predicted": 3035.75,
         "actual": null
       },
       {
         "datetime": "2025-10-30 01:00:00",
-        "predicted": 2993.32,
+        "predicted": 2995.06,
         "actual": null
       },
       {
         "datetime": "2025-10-30 02:00:00",
-        "predicted": 2934.87,
+        "predicted": 2936.6,
         "actual": null
       },
       {
         "datetime": "2025-10-30 03:00:00",
-        "predicted": 2841.23,
+        "predicted": 2842.96,
         "actual": null
       },
       {
         "datetime": "2025-10-30 04:00:00",
-        "predicted": 2748.51,
+        "predicted": 2750.23,
         "actual": null
       },
       {
         "datetime": "2025-10-30 05:00:00",
-        "predicted": 2721.92,
+        "predicted": 2723.64,
         "actual": null
       },
       {
         "datetime": "2025-10-30 06:00:00",
-        "predicted": 2793.06,
+        "predicted": 2794.78,
         "actual": null
       },
       {
         "datetime": "2025-10-30 07:00:00",
-        "predicted": 2914.82,
+        "predicted": 2916.54,
         "actual": null
       },
       {
         "datetime": "2025-10-30 08:00:00",
-        "predicted": 2980.97,
+        "predicted": 2982.68,
         "actual": null
       },
       {
         "datetime": "2025-10-30 09:00:00",
-        "predicted": 2902.6,
+        "predicted": 2904.3,
         "actual": null
       },
       {
         "datetime": "2025-10-30 10:00:00",
-        "predicted": 2681.33,
+        "predicted": 2683.02,
         "actual": null
       },
       {
         "datetime": "2025-10-30 11:00:00",
-        "predicted": 2418.11,
+        "predicted": 2419.79,
         "actual": null
       },
       {
         "datetime": "2025-10-30 12:00:00",
-        "predicted": 2249.11,
+        "predicted": 2250.79,
         "actual": null
       },
       {
         "datetime": "2025-10-30 13:00:00",
-        "predicted": 2259.63,
+        "predicted": 2261.31,
         "actual": null
       },
       {
         "datetime": "2025-10-30 14:00:00",
-        "predicted": 2440.78,
+        "predicted": 2442.44,
         "actual": null
       },
       {
         "datetime": "2025-10-30 15:00:00",
-        "predicted": 2713.26,
+        "predicted": 2714.91,
         "actual": null
       },
       {
         "datetime": "2025-10-30 16:00:00",
-        "predicted": 2986.86,
+        "predicted": 2988.5,
         "actual": null
       },
       {
         "datetime": "2025-10-30 17:00:00",
-        "predicted": 3203.82,
+        "predicted": 3205.45,
         "actual": null
       },
       {
         "datetime": "2025-10-30 18:00:00",
-        "predicted": 3341.72,
+        "predicted": 3343.35,
         "actual": null
       },
       {
         "datetime": "2025-10-30 19:00:00",
-        "predicted": 3393.84,
+        "predicted": 3395.45,
         "actual": null
       },
       {
         "datetime": "2025-10-30 20:00:00",
-        "predicted": 3359.51,
+        "predicted": 3361.11,
         "actual": null
       },
       {
         "datetime": "2025-10-30 21:00:00",
-        "predicted": 3254.25,
+        "predicted": 3255.84,
         "actual": null
       },
       {
         "datetime": "2025-10-30 22:00:00",
-        "predicted": 3118.61,
+        "predicted": 3120.2,
         "actual": null
       },
       {
         "datetime": "2025-10-30 23:00:00",
-        "predicted": 3002.56,
+        "predicted": 3004.14,
         "actual": null
       },
       {
         "datetime": "2025-10-31 00:00:00",
-        "predicted": 2931.29,
+        "predicted": 2932.87,
         "actual": null
       },
       {
         "datetime": "2025-10-31 01:00:00",
-        "predicted": 2885.85,
+        "predicted": 2887.42,
         "actual": null
       },
       {
         "datetime": "2025-10-31 02:00:00",
-        "predicted": 2824.14,
+        "predicted": 2825.71,
         "actual": null
       },
       {
         "datetime": "2025-10-31 03:00:00",
-        "predicted": 2728.78,
+        "predicted": 2730.34,
         "actual": null
       },
       {
         "datetime": "2025-10-31 04:00:00",
-        "predicted": 2635.86,
+        "predicted": 2637.4,
         "actual": null
       },
       {
         "datetime": "2025-10-31 05:00:00",
-        "predicted": 2610.53,
+        "predicted": 2612.06,
         "actual": null
       },
       {
         "datetime": "2025-10-31 06:00:00",
-        "predicted": 2684.34,
+        "predicted": 2685.86,
         "actual": null
       },
       {
         "datetime": "2025-10-31 07:00:00",
-        "predicted": 2810.08,
+        "predicted": 2811.59,
         "actual": null
       },
       {
         "datetime": "2025-10-31 08:00:00",
-        "predicted": 2881.4,
+        "predicted": 2882.9,
         "actual": null
       },
       {
         "datetime": "2025-10-31 09:00:00",
-        "predicted": 2809.25,
+        "predicted": 2810.75,
         "actual": null
       },
       {
         "datetime": "2025-10-31 10:00:00",
-        "predicted": 2595.11,
+        "predicted": 2596.6,
         "actual": null
       },
       {
         "datetime": "2025-10-31 11:00:00",
-        "predicted": 2339.74,
+        "predicted": 2341.22,
         "actual": null
       },
       {
         "datetime": "2025-10-31 12:00:00",
-        "predicted": 2179.14,
+        "predicted": 2180.61,
         "actual": null
       },
       {
         "datetime": "2025-10-31 13:00:00",
-        "predicted": 2198.39,
+        "predicted": 2199.85,
         "actual": null
       },
       {
         "datetime": "2025-10-31 14:00:00",
-        "predicted": 2388.38,
+        "predicted": 2389.84,
         "actual": null
       },
       {
         "datetime": "2025-10-31 15:00:00",
-        "predicted": 2669.61,
+        "predicted": 2671.06,
         "actual": null
       },
       {
         "datetime": "2025-10-31 16:00:00",
-        "predicted": 2951.65,
+        "predicted": 2953.09,
         "actual": null
       },
       {
         "datetime": "2025-10-31 17:00:00",
-        "predicted": 3176.51,
+        "predicted": 3177.95,
         "actual": null
       },
       {
         "datetime": "2025-10-31 18:00:00",
-        "predicted": 3321.57,
+        "predicted": 3323.0,
         "actual": null
       },
       {
         "datetime": "2025-10-31 19:00:00",
-        "predicted": 3379.87,
+        "predicted": 3381.3,
         "actual": null
       },
       {
         "datetime": "2025-10-31 20:00:00",
-        "predicted": 3350.57,
+        "predicted": 3351.99,
         "actual": null
       },
       {
         "datetime": "2025-10-31 21:00:00",
-        "predicted": 3248.99,
+        "predicted": 3250.4,
         "actual": null
       },
       {
         "datetime": "2025-10-31 22:00:00",
-        "predicted": 3115.5,
+        "predicted": 3116.92,
         "actual": null
       },
       {
         "datetime": "2025-10-31 23:00:00",
-        "predicted": 2999.93,
+        "predicted": 3001.35,
         "actual": null
       },
       {
         "datetime": "2025-11-01 00:00:00",
-        "predicted": 2927.34,
+        "predicted": 2928.76,
         "actual": null
       },
       {
         "datetime": "2025-11-01 01:00:00",
-        "predicted": 2878.66,
+        "predicted": 2880.08,
         "actual": null
       },
       {
         "datetime": "2025-11-01 02:00:00",
-        "predicted": 2811.73,
+        "predicted": 2813.14,
         "actual": null
       },
       {
         "datetime": "2025-11-01 03:00:00",
-        "predicted": 2709.1,
+        "predicted": 2710.51,
         "actual": null
       },
       {
         "datetime": "2025-11-01 04:00:00",
-        "predicted": 2606.83,
+        "predicted": 2608.24,
         "actual": null
       },
       {
         "datetime": "2025-11-01 05:00:00",
-        "predicted": 2570.09,
+        "predicted": 2571.5,
         "actual": null
       },
       {
         "datetime": "2025-11-01 06:00:00",
-        "predicted": 2630.47,
+        "predicted": 2631.87,
         "actual": null
       },
       {
         "datetime": "2025-11-01 07:00:00",
-        "predicted": 2740.81,
+        "predicted": 2742.21,
         "actual": null
       },
       {
         "datetime": "2025-11-01 08:00:00",
-        "predicted": 2794.87,
+        "predicted": 2796.27,
         "actual": null
       },
       {
         "datetime": "2025-11-01 09:00:00",
-        "predicted": 2703.73,
+        "predicted": 2705.12,
         "actual": null
       },
       {
         "datetime": "2025-11-01 10:00:00",
-        "predicted": 2469.0,
+        "predicted": 2470.39,
         "actual": null
       },
       {
         "datetime": "2025-11-01 11:00:00",
-        "predicted": 2191.65,
+        "predicted": 2193.03,
         "actual": null
       },
       {
         "datetime": "2025-11-01 12:00:00",
-        "predicted": 2007.88,
+        "predicted": 2009.26,
         "actual": null
       },
       {
         "datetime": "2025-11-01 13:00:00",
-        "predicted": 2002.99,
+        "predicted": 2004.37,
         "actual": null
       },
       {
         "datetime": "2025-11-01 14:00:00",
-        "predicted": 2168.15,
+        "predicted": 2169.52,
         "actual": null
       },
       {
         "datetime": "2025-11-01 15:00:00",
-        "predicted": 2424.12,
+        "predicted": 2425.48,
         "actual": null
       },
       {
         "datetime": "2025-11-01 16:00:00",
-        "predicted": 2680.75,
+        "predicted": 2682.11,
         "actual": null
       },
       {
         "datetime": "2025-11-01 17:00:00",
-        "predicted": 2880.37,
+        "predicted": 2881.71,
         "actual": null
       },
       {
         "datetime": "2025-11-01 18:00:00",
-        "predicted": 3000.63,
+        "predicted": 3001.97,
         "actual": null
       },
       {
         "datetime": "2025-11-01 19:00:00",
-        "predicted": 3034.93,
+        "predicted": 3036.26,
         "actual": null
       },
       {
         "datetime": "2025-11-01 20:00:00",
-        "predicted": 2982.7,
+        "predicted": 2984.02,
         "actual": null
       },
       {
         "datetime": "2025-11-01 21:00:00",
-        "predicted": 2859.6,
+        "predicted": 2860.92,
         "actual": null
       },
       {
         "datetime": "2025-11-01 22:00:00",
-        "predicted": 2706.32,
+        "predicted": 2707.62,
         "actual": null
       },
       {
         "datetime": "2025-11-01 23:00:00",
-        "predicted": 2572.94,
+        "predicted": 2574.24,
         "actual": null
       },
       {
         "datetime": "2025-11-02 00:00:00",
-        "predicted": 2484.83,
+        "predicted": 2486.13,
         "actual": null
       },
       {
         "datetime": "2025-11-02 01:00:00",
-        "predicted": 2423.18,
+        "predicted": 2424.47,
         "actual": null
       },
       {
         "datetime": "2025-11-02 02:00:00",
-        "predicted": 2346.07,
+        "predicted": 2347.36,
         "actual": null
       },
       {
         "datetime": "2025-11-02 03:00:00",
-        "predicted": 2236.28,
+        "predicted": 2237.55,
         "actual": null
       },
       {
         "datetime": "2025-11-02 04:00:00",
-        "predicted": 2130.04,
+        "predicted": 2131.3,
         "actual": null
       },
       {
         "datetime": "2025-11-02 05:00:00",
-        "predicted": 2092.71,
+        "predicted": 2093.96,
         "actual": null
       },
       {
         "datetime": "2025-11-02 06:00:00",
-        "predicted": 2155.98,
+        "predicted": 2157.21,
         "actual": null
       },
       {
         "datetime": "2025-11-02 07:00:00",
-        "predicted": 2272.8,
+        "predicted": 2274.02,
         "actual": null
       },
       {
         "datetime": "2025-11-02 08:00:00",
-        "predicted": 2336.98,
+        "predicted": 2338.19,
         "actual": null
       },
       {
         "datetime": "2025-11-02 09:00:00",
-        "predicted": 2259.63,
+        "predicted": 2260.83,
         "actual": null
       },
       {
         "datetime": "2025-11-02 10:00:00",
-        "predicted": 2042.35,
+        "predicted": 2043.54,
         "actual": null
       },
       {
         "datetime": "2025-11-02 11:00:00",
-        "predicted": 1786.05,
+        "predicted": 1787.22,
         "actual": null
       },
       {
         "datetime": "2025-11-02 12:00:00",
-        "predicted": 1626.82,
+        "predicted": 1627.99,
         "actual": null
       },
       {
         "datetime": "2025-11-02 13:00:00",
-        "predicted": 1649.87,
+        "predicted": 1651.02,
         "actual": null
       },
       {
         "datetime": "2025-11-02 14:00:00",
-        "predicted": 1846.16,
+        "predicted": 1847.3,
         "actual": null
       },
       {
         "datetime": "2025-11-02 15:00:00",
-        "predicted": 2136.27,
+        "predicted": 2137.4,
         "actual": null
       },
       {
         "datetime": "2025-11-02 16:00:00",
-        "predicted": 2429.81,
+        "predicted": 2430.93,
         "actual": null
       },
       {
         "datetime": "2025-11-02 17:00:00",
-        "predicted": 2668.84,
+        "predicted": 2669.95,
         "actual": null
       },
       {
         "datetime": "2025-11-02 18:00:00",
-        "predicted": 2830.74,
+        "predicted": 2831.84,
         "actual": null
       },
       {
         "datetime": "2025-11-02 19:00:00",
-        "predicted": 2908.54,
+        "predicted": 2909.63,
         "actual": null
       },
       {
         "datetime": "2025-11-02 20:00:00",
-        "predicted": 2901.37,
+        "predicted": 2902.46,
         "actual": null
       },
       {
         "datetime": "2025-11-02 21:00:00",
-        "predicted": 2824.52,
+        "predicted": 2825.59,
         "actual": null
       },
       {
         "datetime": "2025-11-02 22:00:00",
-        "predicted": 2718.27,
+        "predicted": 2719.34,
         "actual": null
       },
       {
         "datetime": "2025-11-02 23:00:00",
-        "predicted": 2632.35,
+        "predicted": 2633.41,
         "actual": null
       }
     ]

@@ -31,10 +31,32 @@ async function getTGT(): Promise<string> {
       }
     );
 
+    // DEBUG: EPİAŞ'tan gelen yanıtı detaylı logla
+    console.log('🔍 EPİAŞ LOGIN STATUS:', response.status);
+    console.log('🔍 EPİAŞ LOGIN HEADERS:', JSON.stringify(response.headers, null, 2));
+
+    if (response && response.data) {
+      if (typeof response.data === 'string') {
+        console.log('🔍 EPİAŞ LOGIN BODY (string - first 200 chars):', response.data.slice(0, 200));
+      } else {
+        console.log('🔍 EPİAŞ LOGIN BODY KEYS:', Object.keys(response.data));
+        try {
+          const jsonStr = JSON.stringify(response.data);
+          console.log('🔍 EPİAŞ LOGIN BODY LENGTH:', jsonStr.length);
+          console.log('🔍 EPİAŞ LOGIN BODY (first 1000 chars):', jsonStr.slice(0, 1000));
+        } catch(e) {
+          console.log('🔍 EPİAŞ login stringify error:', e);
+        }
+      }
+    } else {
+      console.log('🔍 EPİAŞ login returned EMPTY BODY');
+    }
+
     // Response JSON formatında: { tgt: "TGT-xxx...", created: "...", code: 201 }
     const tgt = response.data.tgt;
 
     if (!tgt) {
+      console.error('❌ TGT field not found. Available fields:', Object.keys(response.data || {}));
       throw new Error('TGT token not found in response');
     }
 
@@ -43,6 +65,14 @@ async function getTGT(): Promise<string> {
 
   } catch (error) {
     console.error('❌ Failed to obtain TGT token:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('❌ Axios Error Details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        headers: error.response?.headers
+      });
+    }
     throw new Error('EPİAŞ authentication failed. Please check your credentials.');
   }
 }

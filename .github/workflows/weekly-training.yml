@@ -2,12 +2,17 @@ name: Weekly Model Training
 
 on:
   schedule:
-    # Her Pazartesi saat 00:00 UTC (03:00 Türkiye saati)
-    # Pazar 23:59 biter → Pazartesi 00:00 başlar → 03:00'da workflow çalışır
-    - cron: '0 0 * * 1'
+    # Her Pazartesi saat 04:00 UTC (07:00 Türkiye saati)
+    # Daily sync (05:00 TRT) bittikten sonra çalışır, en güncel veriyi kullanır
+    - cron: '0 4 * * 1'
 
   # Manuel tetikleme için
   workflow_dispatch:
+
+# Aynı workflow birden fazla çalışmasını önle
+concurrency:
+  group: weekly-training
+  cancel-in-progress: true
 
 jobs:
   train-model:

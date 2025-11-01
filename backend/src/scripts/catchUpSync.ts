@@ -15,6 +15,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -111,21 +117,36 @@ async function catchUpSync() {
 
     log(`En son veri tarihi: ${lastDate}`);
 
-    // 2. Bir gün sonrasından başla (son gün zaten var)
-    const startDate = new Date(lastDate);
-    startDate.setDate(startDate.getDate() + 1);
-    const startDateStr = startDate.toISOString().split('T')[0];
+    // 2. TÜRKİYE SAATİ ile çalış (EPİAŞ Türkiye verileri)
+    const TZ = 'Europe/Istanbul';
 
-    // 3. Dünün tarihini al (EPİAŞ verileri bir önceki günün 23:00'ına kadar hazır)
-    // Workflow gece 02:00'de çalışıyorsa, bir önceki günün tüm verileri mevcut
-    // NOT: UTC ile çalış çünkü database UTC saklıyor
-    const now = new Date();
-    const yesterdayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1));
-    const yesterdayStr = yesterdayUTC.toISOString().split('T')[0];
+    // Database'deki son tarih (sadece tarih kısmı, saat 00:00)
+    const lastDateDay = dayjs(lastDate).tz(TZ).startOf('day');
 
-    log(`Kontrol araligi: ${startDateStr} - ${yesterdayStr} (dahil)`);
+    // Bugün Türkiye saati
+    const todayTR = dayjs().tz(TZ).startOf('day');
+
+    // Dün Türkiye saati (EPİAŞ verileri ~3 saat gecikmeli, 05:00'da çalıştığımızda dün kesin hazır)
+    const yesterdayTR = todayTR.subtract(1, 'day');
+
+    // Başlangıç = son tarihten 1 gün sonra
+    const fromDate = lastDateDay.add(1, 'day');
+
+    // Bitiş = dün
+    const toDate = yesterdayTR;
+
+    log(`Kontrol araligi: ${fromDate.format('YYYY-MM-DD')} - ${toDate.format('YYYY-MM-DD')} (dahil)`);
+
+    // SANITY CHECK: Eğer from > to ise eksik gün yok demektir
+    if (fromDate.isAfter(toDate)) {
+      log('✅ Eksik gun yok! Database guncel.');
+      log(`   (Son veri: ${lastDateDay.format('YYYY-MM-DD')}, Hedef: ${yesterdayTR.format('YYYY-MM-DD')})`);
+      return;
+    }
 
     // 4. Eksik günleri hesapla (dün dahil!)
+    const startDateStr = fromDate.format('YYYY-MM-DD');
+    const yesterdayStr = toDate.format('YYYY-MM-DD');
     const missingDays = getDaysBetweenInclusive(startDateStr, yesterdayStr);
 
     if (missingDays.length === 0) {

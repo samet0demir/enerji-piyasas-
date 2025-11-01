@@ -2,11 +2,17 @@ name: Daily Data Sync
 
 on:
   schedule:
-    # Her gün saat 23:00 UTC (02:00 Türkiye saati)
-    - cron: '0 23 * * *'
+    # Her gün saat 02:00 UTC (05:00 Türkiye saati)
+    # EPİAŞ verileri ~3 saat gecikmeli, 05:00'da dünün tüm verileri hazır
+    - cron: '0 2 * * *'
 
   # Manuel tetikleme için
   workflow_dispatch:
+
+# Aynı workflow birden fazla çalışmasını önle (önceki iptal edilir)
+concurrency:
+  group: daily-sync
+  cancel-in-progress: true
 
 jobs:
   sync-data:
@@ -39,14 +45,38 @@ jobs:
           echo "hash=$HASH_BEFORE" >> $GITHUB_OUTPUT
           echo "📊 Database hash before sync: $HASH_BEFORE"
 
-      - name: Run catch-up data sync
+      - name: Run catch-up data sync (with retry)
         working-directory: ./backend
         env:
           EPIAS_USERNAME: ${{ secrets.EPIAS_USERNAME }}
           EPIAS_PASSWORD: ${{ secrets.EPIAS_PASSWORD }}
         run: |
           echo "Starting catch-up data sync..."
-          npx tsx src/scripts/catchUpSync.ts
+
+          # Retry logic: 3 deneme, exponential backoff (1s, 2s, 4s)
+          MAX_RETRIES=3
+          RETRY_COUNT=0
+          SUCCESS=false
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ] && [ "$SUCCESS" = "false" ]; do
+            echo "🔄 Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES"
+
+            if npx tsx src/scripts/catchUpSync.ts; then
+              SUCCESS=true
+              echo "✅ Sync successful!"
+            else
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                WAIT_TIME=$((2 ** RETRY_COUNT))
+                echo "⚠️  Sync failed, retrying in ${WAIT_TIME}s..."
+                sleep $WAIT_TIME
+              else
+                echo "❌ All retries exhausted, sync failed"
+                exit 1
+              fi
+            fi
+          done
+
           echo "Catch-up sync completed!"
 
       - name: Save database hash after sync

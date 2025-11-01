@@ -74,6 +74,31 @@ def load_data_from_db(end_date=None):
     print(f"[*] Fiyat araligi: {df['y'].min():.2f} TRY -> {df['y'].max():.2f} TRY")
     print(f"[*] Ortalama fiyat: {df['y'].mean():.2f} TRY")
 
+    # FEATURE ENGINEERING: Ekstra bilgiler ekle
+    print("\n[*] Feature engineering yapiliyor...")
+
+    # 1. Saat bilgisi (0-23)
+    df['hour'] = df['ds'].dt.hour
+
+    # 2. Hafta sonu mu? (Cumartesi=5, Pazar=6)
+    df['is_weekend'] = (df['ds'].dt.dayofweek >= 5).astype(int)
+
+    # 3. Peak saat mi? (Sabah 8-10, Akşam 18-21)
+    df['is_peak_hour'] = df['hour'].isin([8, 9, 10, 18, 19, 20, 21]).astype(int)
+
+    # 4. Gündüz mü? (Güneş var, 10:00-16:00)
+    df['is_daytime'] = df['hour'].isin(range(10, 16)).astype(int)
+
+    # 5. Haftanın günü (0=Pazartesi, 6=Pazar)
+    df['day_of_week'] = df['ds'].dt.dayofweek
+
+    print(f"[+] Feature'lar eklendi:")
+    print(f"   - hour (saat): 0-23")
+    print(f"   - is_weekend: {df['is_weekend'].sum()} hafta sonu kaydi")
+    print(f"   - is_peak_hour: {df['is_peak_hour'].sum()} peak saat kaydi")
+    print(f"   - is_daytime: {df['is_daytime'].sum()} gunduz kaydi")
+    print(f"   - day_of_week: 0-6 (Pazartesi-Pazar)")
+
     return df
 
 def create_turkish_holidays():
@@ -132,7 +157,7 @@ def train_prophet_model(df, holidays):
     Prophet modelini eğitir
 
     Args:
-        df: Eğitim verisi
+        df: Eğitim verisi (feature'lar dahil: hour, is_weekend, is_peak_hour, is_daytime, day_of_week)
         holidays: Tatil günleri
 
     Returns:
@@ -165,6 +190,14 @@ def train_prophet_model(df, holidays):
     # Türkiye resmi tatillerini ekle (23 Nisan, 1 Mayıs, 19 Mayıs, 30 Ağustos, 29 Ekim)
     model.add_country_holidays(country_name='TR')
 
+    # FEATURE ENGINEERING: Ekstra bilgileri regressor olarak ekle
+    print("   [*] Custom regressor'lar ekleniyor...")
+    model.add_regressor('hour', prior_scale=5.0)  # Saat bilgisi (gece vs gündüz)
+    model.add_regressor('is_weekend', prior_scale=15.0)  # Hafta sonu etkisi güçlü
+    model.add_regressor('is_peak_hour', prior_scale=10.0)  # Peak saat etkisi
+    model.add_regressor('is_daytime', prior_scale=12.0)  # Güneş enerjisi etkisi
+    model.add_regressor('day_of_week', prior_scale=3.0)  # Haftanın günü
+
     print("   [*] Egitim basliyor (bu birkac dakika surebilir)...")
     model.fit(df)
 
@@ -189,7 +222,9 @@ def evaluate_model(model, df):
     print(f"   Test seti: {len(test)} kayit ({test['ds'].min()} -> {test['ds'].max()})")
 
     # Mevcut model ile test seti için tahmin (yeniden eğitim yapmadan)
-    forecast = model.predict(test[['ds']])
+    # NOT: Model regressorlar kullanıyor, test verisinde de bu kolonlar olmalı
+    test_features = test[['ds', 'hour', 'is_weekend', 'is_peak_hour', 'is_daytime', 'day_of_week']].copy()
+    forecast = model.predict(test_features)
 
     # Performans metrikleri
     y_true = test['y'].values
@@ -198,12 +233,18 @@ def evaluate_model(model, df):
     mae = np.mean(np.abs(y_true - y_pred))
     rmse = np.sqrt(np.mean((y_true - y_pred)**2))
 
-    # MAPE hesapla (sıfır değerleri filtrele)
-    mask = y_true != 0
+    # MAPE hesapla (düşük fiyatları filtrele - outlier protection)
+    # 500 TRY altı fiyatlar anormal (güneş patlaması/hafta sonu anomali)
+    # Bu değerleri MAPE hesabına dahil etmek %795 gibi yanıltıcı sonuçlar verir
+    mask = y_true >= 500
+
     if mask.sum() > 0:
         mape = np.mean(np.abs((y_true[mask] - y_pred[mask]) / y_true[mask])) * 100
+        print(f"   MAPE hesabinda kullanilan: {mask.sum()} / {len(y_true)} kayit (500+ TRY)")
+        print(f"   Filtrelenen dusuk fiyat: {len(y_true) - mask.sum()} kayit (<500 TRY)")
     else:
         mape = 0.0
+        print(f"   UYARI: Tum test verileri 500 TRY altinda, MAPE hesaplanamadi!")
 
     print(f"\n[*] Performans Metrikleri (Son 30 Gun):")
     print(f"   MAE (Ortalama Mutlak Hata): {mae:.2f} TRY")

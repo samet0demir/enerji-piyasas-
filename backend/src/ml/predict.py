@@ -47,6 +47,14 @@ def make_forecast(model, days=7):
     # Gelecek tarihler için dataframe oluştur (saatlik)
     future = model.make_future_dataframe(periods=days*24, freq='H')
 
+    # FEATURE ENGINEERING: Gelecek tarihler için de feature'ları ekle
+    print("[*] Feature engineering (gelecek tarihler icin)...")
+    future['hour'] = future['ds'].dt.hour
+    future['is_weekend'] = (future['ds'].dt.dayofweek >= 5).astype(int)
+    future['is_peak_hour'] = future['hour'].isin([8, 9, 10, 18, 19, 20, 21]).astype(int)
+    future['is_daytime'] = future['hour'].isin(range(10, 16)).astype(int)
+    future['day_of_week'] = future['ds'].dt.dayofweek
+
     # Tahmin yap
     forecast = model.predict(future)
 

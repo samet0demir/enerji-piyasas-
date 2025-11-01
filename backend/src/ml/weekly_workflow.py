@@ -132,6 +132,15 @@ def run_weekly_cycle():
         # Bu hafta için 7 günlük tahmin yap
         import pandas as pd
         future = model.make_future_dataframe(periods=7*24, freq='H')
+
+        # FEATURE ENGINEERING: Gelecek tarihler için de feature'ları ekle
+        print("   [*] Feature engineering uygulanıyor...")
+        future['hour'] = future['ds'].dt.hour
+        future['is_weekend'] = (future['ds'].dt.dayofweek >= 5).astype(int)
+        future['is_peak_hour'] = future['hour'].isin([8, 9, 10, 18, 19, 20, 21]).astype(int)
+        future['is_daytime'] = future['hour'].isin(range(10, 16)).astype(int)
+        future['day_of_week'] = future['ds'].dt.dayofweek
+
         forecast = model.predict(future)
 
         # Sadece bu haftanın tahminlerini al

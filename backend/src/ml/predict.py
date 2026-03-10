@@ -171,6 +171,15 @@ def save_forecast_to_db(forecast, week_start, week_end):
 
     conn = sqlite3.connect(DB_PATH)
 
+    # Schema migration: eksik sütunları ekle (eski DB şeması uyumluluğu)
+    cursor = conn.execute("PRAGMA table_info(forecast_history)")
+    existing_columns = {row[1] for row in cursor.fetchall()}
+    for col in ['prophet_component', 'xgboost_component', 'lstm_component']:
+        if col not in existing_columns:
+            conn.execute(f"ALTER TABLE forecast_history ADD COLUMN {col} REAL")
+            print(f"   [migration] '{col}' sütunu eklendi")
+    conn.commit()
+
     # Önce bu hafta için eski kayıtları sil (varsa)
     delete_query = "DELETE FROM forecast_history WHERE week_start = ?"
     conn.execute(delete_query, (week_start,))

@@ -51,7 +51,7 @@ jobs:
       - name: Create necessary directories
         run: |
           mkdir -p backend/logs
-          mkdir -p src/ml/models
+          mkdir -p backend/models
 
       - name: Run model training
         working-directory: ./backend

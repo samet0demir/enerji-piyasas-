@@ -11,10 +11,6 @@ build/
 .env
 .env.local
 
-# Documentation - Except README
-*.md
-!README.md
-
 # OS
 .DS_Store
 Thumbs.db
@@ -28,29 +24,25 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Test files (temporary)
-<<<<<<< Updated upstream
-backend/data/energy.db
-backend/data/energy.db.corrupted.backup
-backend/data/energy-dev.db
-backend/data/energy-dev.db-shm
-backend/data/energy-dev.db-wal
-=======
+# Temporary check scripts
 backend/check_*.js
 backend/energy.db
 
-# Database files & backups
-backend/data/energy.db
+# Database - Dev & backup files (prod energy.db IS tracked)
+backend/data/energy-dev.db
+backend/data/energy-dev.db-shm
+backend/data/energy-dev.db-wal
 backend/data/energy.db.corrupted.backup
->>>>>>> Stashed changes
+backend/data/energy.db.corrupted.backup-shm
+backend/data/energy.db.corrupted.backup-wal
 backend/data/backups/
 *.db-shm
 *.db-wal
 
 # Logs
-# *.log  # Commented out for GitHub Actions artifacts (we want to see sync logs)
+# *.log  # Commented out for GitHub Actions artifacts
 
-# Claude Code settings (personal IDE configuration)
+# Claude Code settings
 .claude/
 
 # Documentation - Only keep README.md for GitHub

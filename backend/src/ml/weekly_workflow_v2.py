@@ -1,194 +1,146 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-EPİAŞ MCP Fiyat Tahmini - Haftalık İş Akışı (v2 - Sadece Prophet v2)
-================================================================
+Weekly model workflow using the ensemble pipeline.
 
-Bu script haftalık döngüyü orkestre eder:
-1. Geçen hafta tahmin vs gerçek karşılaştırması
-2. Prophet v2 model eğitimi (sadece time-based features)
-3. Bu hafta tahmini
-4. JSON export
-
-Her Pazartesi sabah 07:00 TRT'de GitHub Actions tarafından çalıştırılır.
+Steps:
+1. Compare last week's published forecasts with actuals.
+2. Train multivariate Prophet.
+3. Train XGBoost residual model.
+4. Load Prophet + XGBoost (+ optional LSTM) ensemble.
+5. Run validation gates and save this week's forecast.
+6. Export frontend JSON.
 """
 
-import sys
 import os
+import sys
 from datetime import datetime, timedelta
 
-# Script'in çalıştığı dizin
+import pandas as pd
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(script_dir)
 
 
 def get_monday_date(offset_weeks=0):
-    """
-    Pazartesi tarihini döndürür
-
-    Args:
-        offset_weeks (int): Kaç hafta öncesi/sonrası (0 = bu hafta, -1 = geçen hafta)
-
-    Returns:
-        str: Pazartesi tarihi (YYYY-MM-DD)
-    """
     today = datetime.now()
-    days_since_monday = today.weekday()  # Pazartesi = 0
-    this_monday = today - timedelta(days=days_since_monday)
+    this_monday = today - timedelta(days=today.weekday())
     target_monday = this_monday + timedelta(weeks=offset_weeks)
-    return target_monday.strftime('%Y-%m-%d')
+    return target_monday.strftime("%Y-%m-%d")
 
 
 def get_sunday_date(monday_date):
-    """
-    Pazartesi tarihinden Pazar tarihini hesaplar
+    monday = datetime.strptime(monday_date, "%Y-%m-%d")
+    return (monday + timedelta(days=6)).strftime("%Y-%m-%d")
 
-    Args:
-        monday_date (str): Pazartesi tarihi (YYYY-MM-DD)
 
-    Returns:
-        str: Pazar tarihi (YYYY-MM-DD)
-    """
-    monday = datetime.strptime(monday_date, '%Y-%m-%d')
-    sunday = monday + timedelta(days=6)
-    return sunday.strftime('%Y-%m-%d')
+def _validate_recent_window(ensemble, df, expected_hours=168):
+    from quality_guards import validate_forecast_quality
+
+    validation = df.tail(expected_hours).copy()
+    if len(validation) != expected_hours:
+        raise ValueError(f"validation window has {len(validation)} rows, expected {expected_hours}")
+
+    predictions = ensemble.predict(validation)
+    validation_forecasts = pd.DataFrame({
+        "ds": validation["ds"].values,
+        "predicted_price": predictions["ensemble_pred"],
+    })
+    validation_forecasts["predicted_price"] = validation_forecasts["predicted_price"].clip(lower=0)
+
+    report = validate_forecast_quality(
+        validation_forecasts,
+        expected_hours=expected_hours,
+        actuals=validation["y"],
+        seasonal_naive=validation["price_lag_168h"],
+        min_baseline_improvement=0.01,
+    )
+    report["validation_start"] = validation["ds"].min().isoformat()
+    report["validation_end"] = validation["ds"].max().isoformat()
+    return report
 
 
 def run_weekly_cycle():
-    """
-    Haftalık döngüyü çalıştırır (Prophet v2)
-    """
-    print("\n" + "="*70)
-    print("HAFTALIK İŞ AKIŞI BAŞLIYOR (PROPHET V2)")
-    print("="*70)
-    print(f"Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*70)
+    print("\n" + "=" * 70)
+    print("WEEKLY ENSEMBLE WORKFLOW STARTING")
+    print("=" * 70)
+    print(f"Run time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    # Tarihleri hesapla
     this_week_monday = get_monday_date(0)
     this_week_sunday = get_sunday_date(this_week_monday)
-
     last_week_monday = get_monday_date(-1)
     last_week_sunday = get_sunday_date(last_week_monday)
 
-    print(f"\nBU HAFTA: {this_week_monday} (Pazartesi) - {this_week_sunday} (Pazar)")
-    print(f"GECEN HAFTA: {last_week_monday} (Pazartesi) - {last_week_sunday} (Pazar)")
+    print(f"This week: {this_week_monday} - {this_week_sunday}")
+    print(f"Last week: {last_week_monday} - {last_week_sunday}")
 
-    # =====================================================================
-    # ADIM 1: Geçen hafta tahmin vs gerçek karşılaştırması
-    # =====================================================================
-    print("\n" + "="*70)
-    print("ADIM 1: Gecen hafta tahmin vs gercek karsilastirmasi")
-    print("="*70)
+    print("\n[1/6] Comparing last week's forecasts")
+    from compare_forecasts import compare_week
 
-    try:
-        from compare_forecasts import compare_week
-        result = compare_week(last_week_monday, last_week_sunday)
-        if result:
-            print(f"\nBasarili! Gecen hafta karsilastirmasi tamamlandi!")
-            print(f"   MAPE: {result['mape']:.2f}%")
-            print(f"   MAE: {result['mae']:.2f} TRY")
-            print(f"   RMSE: {result['rmse']:.2f} TRY")
-        else:
-            print(f"\nUyari: Gecen hafta karsilastirmasi yapilamadi (veri eksik olabilir)")
-    except Exception as e:
-        print(f"\nUyari: Gecen hafta karsilastirmasi atlandi: {e}")
+    comparison = compare_week(last_week_monday, last_week_sunday)
+    if not comparison or comparison["total_predictions"] < 168:
+        raise ValueError(f"Last week comparison incomplete: {comparison}")
 
-    # =====================================================================
-    # ADIM 2: Prophet v2 model eğitimi (sadece time-based features)
-    # =====================================================================
-    print("\n" + "="*70)
-    print("ADIM 2: Prophet v2 model egitimi")
-    print("="*70)
-    print(f"Egitim verisi: {this_week_monday} tarihine KADAR (dahil degil)")
+    print("\n[2/6] Training multivariate Prophet")
+    from train_prophet import main as train_prophet
 
-    try:
-        from train_prophet_improved import main as train_prophet_v2
-        model, mae, rmse, mape = train_prophet_v2()
-        print(f"\nBasarili! Prophet v2 model egitimi tamamlandi!")
-        print(f"   Test performansi: MAE={mae:.2f} TRY, MAPE={mape:.2f}%")
-    except Exception as e:
-        print(f"\nHATA: Prophet v2 model egitimi BASARISIZ: {e}")
-        import traceback
-        traceback.print_exc()
-        raise e
+    prophet_model, prophet_mae, prophet_rmse, prophet_mape = train_prophet()
+    print(f"Prophet trained: MAE={prophet_mae:.2f}, RMSE={prophet_rmse:.2f}, MAPE={prophet_mape:.2f}%")
 
-    # =====================================================================
-    # ADIM 3: Bu hafta tahmini
-    # =====================================================================
-    print("\n" + "="*70)
-    print("ADIM 3: Bu hafta tahmini")
-    print("="*70)
-    print(f"Tahmin araligi: {this_week_monday} - {this_week_sunday}")
+    print("\n[3/6] Training XGBoost residual model")
+    from train_xgboost import main as train_xgboost
 
-    try:
-        from predict import load_model, make_forecast, save_forecast_to_db
+    _xgb_model, _xgb_features, xgb_mae, xgb_rmse, xgb_mape = train_xgboost()
+    print(f"XGBoost trained: MAE={xgb_mae:.2f}, RMSE={xgb_rmse:.2f}, MAPE={xgb_mape:.2f}%")
 
-        # Prophet v2 modelini yukle
-        model = load_model()
+    print("\n[4/6] Loading ensemble and running validation gate")
+    from ensemble import EnsembleModel
+    from features import load_combined_data, engineer_features
+    from quality_guards import validate_forecast_quality, save_quality_report
 
-        # 7 günlük tahmin
-        forecasts = make_forecast(model, days=7)
+    df = engineer_features(load_combined_data())
+    ensemble = EnsembleModel().load_models()
+    validation_report = _validate_recent_window(ensemble, df)
 
-        print(f"\nBasarili! {len(forecasts)} saatlik tahmin uretildi")
-        print(f"   Ortalama: {forecasts['yhat'].mean():.2f} TRY")
-        print(f"   Min: {forecasts['yhat'].min():.2f} TRY")
-        print(f"   Max: {forecasts['yhat'].max():.2f} TRY")
+    print("\n[5/6] Forecasting current week")
+    forecasts = ensemble.forecast_future(df, days=7, start_date=this_week_monday)
+    forecast_report = validate_forecast_quality(forecasts, expected_hours=168)
 
-        # Database'e kaydet
-        save_forecast_to_db(forecasts, this_week_monday, this_week_sunday)
-        print(f"Basarili! Tahminler database'e kaydedildi")
+    quality_report = {
+        **validation_report,
+        "current_forecast": forecast_report,
+        "clipped_negative_predictions": int(forecasts.attrs.get("clipped_negative_predictions", 0)),
+        "model_type": "Prophet + XGBoost + LSTM Ensemble" if ensemble.use_lstm else "Prophet + XGBoost Ensemble",
+        "models_count": 3 if ensemble.use_lstm else 2,
+        "last_week_mape": float(comparison["mape"]),
+        "last_week_mae": float(comparison["mae"]),
+        "last_week_rmse": float(comparison["rmse"]),
+    }
+    save_quality_report(quality_report)
 
-    except Exception as e:
-        print(f"\nHATA: Tahmin yapma BASARISIZ: {e}")
-        import traceback
-        traceback.print_exc()
-        raise e
+    from predict import save_forecast_to_db
 
-    # =====================================================================
-    # ADIM 4: JSON Export
-    # =====================================================================
-    print("\n" + "="*70)
-    print("ADIM 4: JSON Export (Frontend icin)")
-    print("="*70)
+    save_forecast_to_db(forecasts, this_week_monday, this_week_sunday)
 
-    try:
-        from export_json import main as export_json
-        export_json()
-        print(f"Basarili! JSON export tamamlandi")
-    except Exception as e:
-        print(f"\nHATA: JSON export BASARISIZ: {e}")
-        import traceback
-        traceback.print_exc()
+    print("\n[6/6] Exporting frontend JSON")
+    from export_json import export_forecasts
 
-    # =====================================================================
-    # ÖZET
-    # =====================================================================
-    print("\n" + "="*70)
-    print("HAFTALIK IS AKISI TAMAMLANDI!")
-    print("="*70)
-    print(f"Yeni hafta tahmini hazir: {this_week_monday} - {this_week_sunday}")
-    print(f"Model: Prophet v2 (time-based)")
-    print(f"Gecen hafta performansi kaydedildi")
-    print(f"JSON dosyasi frontend icin guncellendi")
-    print("="*70)
+    export_forecasts()
 
+    print("\n" + "=" * 70)
+    print("WEEKLY ENSEMBLE WORKFLOW COMPLETED")
+    print("=" * 70)
     return True
 
 
 def main():
-    """Ana fonksiyon"""
     try:
-        success = run_weekly_cycle()
-        if success:
-            print("\nIslem basarili!")
-            sys.exit(0)
-        else:
-            print("\nIslem basarisiz!")
-            sys.exit(1)
+        run_weekly_cycle()
+        sys.exit(0)
     except Exception as e:
         print(f"\nFATAL ERROR: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 

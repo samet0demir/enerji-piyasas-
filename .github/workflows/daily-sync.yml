@@ -2,17 +2,15 @@ name: Daily Data Sync
 
 on:
   schedule:
-    # Her gün saat 02:00 UTC (05:00 Türkiye saati)
-    # EPİAŞ verileri ~3 saat gecikmeli, 05:00'da dünün tüm verileri hazır
     - cron: '0 2 * * *'
-
-  # Manuel tetikleme için
   workflow_dispatch:
 
-# Aynı workflow birden fazla çalışmasını önle (önceki iptal edilir)
 concurrency:
-  group: daily-sync
-  cancel-in-progress: true
+  group: energy-data-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
 
 jobs:
   sync-data:
@@ -38,87 +36,76 @@ jobs:
       - name: Create logs directory
         run: mkdir -p backend/logs
 
+      - name: Pull latest branch before mutating database
+        run: git pull --rebase origin main
+
       - name: Save database hash before sync
         id: hash-before
         run: |
           HASH_BEFORE=$(md5sum backend/data/energy.db | awk '{print $1}')
           echo "hash=$HASH_BEFORE" >> $GITHUB_OUTPUT
-          echo "📊 Database hash before sync: $HASH_BEFORE"
+          echo "Database hash before sync: $HASH_BEFORE"
 
-      - name: Run catch-up data sync (with retry)
+      - name: Run catch-up data sync with retry
         working-directory: ./backend
         env:
           EPIAS_USERNAME: ${{ secrets.EPIAS_USERNAME }}
           EPIAS_PASSWORD: ${{ secrets.EPIAS_PASSWORD }}
         run: |
-          echo "Starting catch-up data sync..."
+          if [ -z "$EPIAS_USERNAME" ] || [ -z "$EPIAS_PASSWORD" ]; then
+            echo "EPIAS credentials are missing"
+            exit 1
+          fi
 
-          # Retry logic: 3 deneme, exponential backoff (1s, 2s, 4s)
           MAX_RETRIES=3
           RETRY_COUNT=0
           SUCCESS=false
 
           while [ $RETRY_COUNT -lt $MAX_RETRIES ] && [ "$SUCCESS" = "false" ]; do
-            echo "🔄 Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES"
+            echo "Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES"
 
             if npx tsx src/scripts/catchUpSync.ts; then
               SUCCESS=true
-              echo "✅ Sync successful!"
             else
               RETRY_COUNT=$((RETRY_COUNT + 1))
               if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
-                WAIT_TIME=$((2 ** RETRY_COUNT))
-                echo "⚠️  Sync failed, retrying in ${WAIT_TIME}s..."
-                sleep $WAIT_TIME
+                sleep $((2 ** RETRY_COUNT))
               else
-                echo "❌ All retries exhausted, sync failed"
+                echo "All retries exhausted, sync failed"
                 exit 1
               fi
             fi
           done
-
-          echo "Catch-up sync completed!"
 
       - name: Save database hash after sync
         id: hash-after
         run: |
           HASH_AFTER=$(md5sum backend/data/energy.db | awk '{print $1}')
           echo "hash=$HASH_AFTER" >> $GITHUB_OUTPUT
-          echo "📊 Database hash after sync: $HASH_AFTER"
+          echo "Database hash after sync: $HASH_AFTER"
 
       - name: Check for database changes
         id: git-check
         run: |
-          echo "🔍 Comparing hashes..."
-          echo "HASH_BEFORE = ${{ steps.hash-before.outputs.hash }}"
-          echo "HASH_AFTER  = ${{ steps.hash-after.outputs.hash }}"
-
           if [ "${{ steps.hash-before.outputs.hash }}" != "${{ steps.hash-after.outputs.hash }}" ]; then
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "✅ Database changed! (hash mismatch)"
-            echo "Before: ${{ steps.hash-before.outputs.hash }}"
-            echo "After: ${{ steps.hash-after.outputs.hash }}"
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "❌ No database changes detected (hash identical)"
           fi
 
-          echo "🎯 Changed output: ${{ steps.git-check.outputs.changed }}"
+      - name: Validate database after sync
+        working-directory: ./backend
+        run: npx tsx src/scripts/validateWorkflowOutputs.ts --db-only
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changed == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-
-          # Remote'tan son değişiklikleri çek (eğer başka commit varsa)
-          git pull --rebase origin main || echo "No remote changes to pull"
-
           git add backend/data/energy.db
           git add backend/logs/*.log || true
-          git commit -m "chore: auto-sync EPİAŞ data [skip ci]"
+          git commit -m "chore: auto-sync EPIAS data [skip ci]"
           git push
-          echo "✅ Changes committed and pushed successfully"
 
       - name: Upload logs as artifact
         if: always()

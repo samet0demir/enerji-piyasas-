@@ -1,106 +1,111 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-EPİAŞ MCP Fiyat Tahmini - JSON Export
-=====================================
-
-Bu script:
-1. forecast_history'den bu hafta ve geçen hafta tahminlerini çeker
-2. weekly_performance'tan performans trendini çeker
-3. Frontend için JSON dosyası oluşturur
+Export forecast and performance data for the frontend.
 """
 
-import pandas as pd
-import sqlite3
 import json
 import os
-from datetime import datetime, timedelta
+import sqlite3
 import sys
+from datetime import datetime, timedelta
 
-# Database path configuration
+import numpy as np
+import pandas as pd
+
 try:
     from db_config import DB_PATH
 except ImportError:
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     from db_config import DB_PATH
-OUTPUT_PATH = os.path.join(os.path.dirname(__file__), '../../public/forecasts.json')
+
+
+OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "../../public/forecasts.json")
+QUALITY_REPORT_PATH = os.path.join(os.path.dirname(__file__), "../../models/quality_report.json")
+
 
 def get_current_week_monday():
-    """Bugünün ait olduğu haftanın Pazartesi tarihini döndürür"""
     today = datetime.now()
-    # Pazartesi = 0, Pazar = 6
-    days_since_monday = today.weekday()
-    monday = today - timedelta(days=days_since_monday)
-    return monday.strftime('%Y-%m-%d')
+    monday = today - timedelta(days=today.weekday())
+    return monday.strftime("%Y-%m-%d")
+
+
+def _clean_number(value, digits=2):
+    if value is None or pd.isna(value) or not np.isfinite(float(value)):
+        return None
+    return round(float(value), digits)
+
+
+def _load_quality_report():
+    if not os.path.exists(QUALITY_REPORT_PATH):
+        return None
+    with open(QUALITY_REPORT_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
 
 def export_forecasts():
-    """
-    Database'den tahminleri ve performansı çekip JSON'a export eder
-    """
-    print("\n" + "="*70)
-    print("JSON EXPORT - Frontend için veri hazırlama")
-    print("="*70)
+    print("\n" + "=" * 70)
+    print("JSON EXPORT - Frontend data")
+    print("=" * 70)
 
     conn = sqlite3.connect(DB_PATH)
 
-    # Bu haftanın Pazartesi'si
     this_week_monday = get_current_week_monday()
-    this_week_sunday = (datetime.strptime(this_week_monday, '%Y-%m-%d') + timedelta(days=6)).strftime('%Y-%m-%d')
+    this_week_sunday = (datetime.strptime(this_week_monday, "%Y-%m-%d") + timedelta(days=6)).strftime("%Y-%m-%d")
+    last_week_monday = (datetime.strptime(this_week_monday, "%Y-%m-%d") - timedelta(days=7)).strftime("%Y-%m-%d")
+    last_week_sunday = (datetime.strptime(last_week_monday, "%Y-%m-%d") + timedelta(days=6)).strftime("%Y-%m-%d")
 
-    # Geçen haftanın Pazartesi'si
-    last_week_monday = (datetime.strptime(this_week_monday, '%Y-%m-%d') - timedelta(days=7)).strftime('%Y-%m-%d')
-    last_week_sunday = (datetime.strptime(last_week_monday, '%Y-%m-%d') + timedelta(days=6)).strftime('%Y-%m-%d')
-
-    print(f"\n[*] Bu hafta: {this_week_monday} - {this_week_sunday}")
-    print(f"[*] Geçen hafta: {last_week_monday} - {last_week_sunday}")
-
-    # 1. Bu hafta tahminleri
-    print(f"\n[*] Bu hafta tahminleri yükleniyor...")
     current_week_query = """
-        SELECT forecast_datetime, predicted_price, actual_price, absolute_error
+        SELECT
+            forecast_datetime,
+            predicted_price,
+            actual_price,
+            absolute_error,
+            prophet_component,
+            xgboost_component,
+            lstm_component
         FROM forecast_history
         WHERE week_start = ?
         ORDER BY forecast_datetime
     """
     current_week = pd.read_sql_query(current_week_query, conn, params=[this_week_monday])
+    current_week = current_week.replace([np.inf, -np.inf], np.nan)
 
     current_forecasts = []
-    if len(current_week) > 0:
-        for _, row in current_week.iterrows():
-            current_forecasts.append({
-                'datetime': row['forecast_datetime'],
-                'predicted': round(row['predicted_price'], 2),
-                'actual': round(row['actual_price'], 2) if pd.notna(row['actual_price']) else None
-            })
-        print(f"[+] {len(current_forecasts)} tahmin bulundu")
-    else:
-        print(f"[!] Bu hafta için tahmin bulunamadı!")
+    for _, row in current_week.iterrows():
+        predicted = _clean_number(row["predicted_price"])
+        current_forecasts.append({
+            "datetime": row["forecast_datetime"],
+            "predicted": predicted,
+            "actual": _clean_number(row["actual_price"]),
+            "prophet": _clean_number(row.get("prophet_component")),
+            "xgboost": _clean_number(row.get("xgboost_component")),
+            "lstm": _clean_number(row.get("lstm_component")),
+            "lower": predicted,
+            "upper": predicted,
+        })
 
-    # 2. Geçen hafta performansı
-    print(f"\n[*] Geçen hafta performansı yükleniyor...")
     last_week_perf_query = """
-        SELECT mape, mae, rmse, total_predictions
+        SELECT week_start, week_end, mape, mae, rmse, total_predictions
         FROM weekly_performance
         WHERE week_start = ?
     """
     last_week_perf = pd.read_sql_query(last_week_perf_query, conn, params=[last_week_monday])
+    last_week_perf = last_week_perf.replace([np.inf, -np.inf], np.nan)
 
     last_week_performance = None
     if len(last_week_perf) > 0:
         row = last_week_perf.iloc[0]
         last_week_performance = {
-            'week': f"{last_week_monday} - {last_week_sunday}",
-            'mape': round(row['mape'], 2),
-            'mae': round(row['mae'], 2),
-            'rmse': round(row['rmse'], 2),
-            'total_predictions': int(row['total_predictions'])
+            "week": f"{last_week_monday} - {last_week_sunday}",
+            "week_start": row["week_start"],
+            "week_end": row["week_end"],
+            "mape": _clean_number(row["mape"]),
+            "mae": _clean_number(row["mae"]),
+            "rmse": _clean_number(row["rmse"]),
+            "total_predictions": int(row["total_predictions"]),
         }
-        print(f"[+] Performans: MAPE {row['mape']:.2f}%, MAE {row['mae']:.2f} TRY")
-    else:
-        print(f"[!] Geçen hafta performansı bulunamadı")
 
-    # 3. Geçen hafta karşılaştırma (tahmin vs gerçek)
-    print(f"\n[*] Geçen hafta karşılaştırması yükleniyor...")
     last_week_comparison_query = """
         SELECT forecast_datetime, predicted_price, actual_price, absolute_error, percentage_error
         FROM forecast_history
@@ -108,95 +113,80 @@ def export_forecasts():
         ORDER BY forecast_datetime
     """
     last_week_comp = pd.read_sql_query(last_week_comparison_query, conn, params=[last_week_monday])
+    last_week_comp = last_week_comp.replace([np.inf, -np.inf], np.nan)
 
     last_week_comparison = []
-    if len(last_week_comp) > 0:
-        for _, row in last_week_comp.iterrows():
-            last_week_comparison.append({
-                'datetime': row['forecast_datetime'],
-                'predicted': round(row['predicted_price'], 2),
-                'actual': round(row['actual_price'], 2),
-                'error': round(row['absolute_error'], 2),
-                'error_percent': round(row['percentage_error'], 2)
-            })
-        print(f"[+] {len(last_week_comparison)} karşılaştırma kaydı bulundu")
-    else:
-        print(f"[!] Geçen hafta karşılaştırması bulunamadı")
+    for _, row in last_week_comp.iterrows():
+        last_week_comparison.append({
+            "datetime": row["forecast_datetime"],
+            "predicted": _clean_number(row["predicted_price"]),
+            "actual": _clean_number(row["actual_price"]),
+            "error": _clean_number(row["absolute_error"]),
+            "error_percent": _clean_number(row["percentage_error"]),
+        })
 
-    # 4. Haftalık performans trendi (son 8 hafta)
-    print(f"\n[*] Haftalık performans trendi yükleniyor...")
     trend_query = """
-        SELECT week_start, week_end, mape, mae, rmse
+        SELECT week_start, week_end, mape, mae, rmse, total_predictions
         FROM weekly_performance
         ORDER BY week_start DESC
         LIMIT 8
     """
     trend = pd.read_sql_query(trend_query, conn)
+    trend = trend.replace([np.inf, -np.inf], np.nan)
 
     historical_trend = []
-    if len(trend) > 0:
-        for _, row in trend.iterrows():
-            historical_trend.append({
-                'week': f"{row['week_start']} - {row['week_end']}",
-                'week_start': row['week_start'],
-                'week_end': row['week_end'],
-                'mape': round(row['mape'], 2),
-                'mae': round(row['mae'], 2),
-                'rmse': round(row['rmse'], 2)
-            })
-        print(f"[+] {len(historical_trend)} haftalık performans kaydı bulundu")
-    else:
-        print(f"[!] Performans trendi bulunamadı")
+    for _, row in trend.iterrows():
+        historical_trend.append({
+            "week": f"{row['week_start']} - {row['week_end']}",
+            "week_start": row["week_start"],
+            "week_end": row["week_end"],
+            "mape": _clean_number(row["mape"]),
+            "mae": _clean_number(row["mae"]),
+            "rmse": _clean_number(row["rmse"]),
+            "total_predictions": int(row["total_predictions"]),
+        })
 
     conn.close()
 
-    # 5. JSON oluştur
-    print(f"\n[*] JSON dosyası oluşturuluyor...")
+    quality = _load_quality_report()
+    model_type = None
+    models_count = None
+    if quality:
+        model_type = quality.get("model_type")
+        models_count = quality.get("models_count")
+
     output_data = {
-        'generated_at': datetime.now().isoformat(),
-        'current_week': {
-            'start': this_week_monday,
-            'end': this_week_sunday,
-            'forecasts': current_forecasts
+        "generated_at": datetime.now().isoformat(),
+        "model_type": model_type or "Prophet + XGBoost Ensemble",
+        "models_count": models_count or 2,
+        "quality": quality,
+        "current_week": {
+            "start": this_week_monday,
+            "end": this_week_sunday,
+            "forecasts": current_forecasts,
         },
-        'last_week_performance': last_week_performance,
-        'last_week_comparison': last_week_comparison,
-        'historical_trend': historical_trend
+        "last_week_performance": last_week_performance,
+        "last_week_comparison": last_week_comparison,
+        "historical_trend": historical_trend,
     }
 
-    # public klasörünü oluştur
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(output_data, f, ensure_ascii=False, indent=2, allow_nan=False)
 
-    # JSON'u kaydet (backend/public)
-    with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
-        json.dump(output_data, f, ensure_ascii=False, indent=2)
-
-    print(f"[+] JSON dosyası kaydedildi: {OUTPUT_PATH}")
-    print(f"   Dosya boyutu: {os.path.getsize(OUTPUT_PATH) / 1024:.2f} KB")
-
-    # Frontend'e de kopyala
-    frontend_path = os.path.join(os.path.dirname(__file__), '../../../frontend/public/forecasts.json')
+    frontend_path = os.path.join(os.path.dirname(__file__), "../../../frontend/public/forecasts.json")
     os.makedirs(os.path.dirname(frontend_path), exist_ok=True)
+    with open(frontend_path, "w", encoding="utf-8") as f:
+        json.dump(output_data, f, ensure_ascii=False, indent=2, allow_nan=False)
 
-    with open(frontend_path, 'w', encoding='utf-8') as f:
-        json.dump(output_data, f, ensure_ascii=False, indent=2)
-
-    print(f"[+] Frontend JSON kopyalandı: {frontend_path}")
-    print("="*70)
-
+    print(f"[+] JSON saved: {OUTPUT_PATH}")
+    print(f"[+] Frontend copy saved: {frontend_path}")
     return output_data
 
+
 def main():
-    """Ana fonksiyon"""
-    try:
-        data = export_forecasts()
-        print("\n[+] JSON export başarılı!")
-        return data
-    except Exception as e:
-        print(f"\n[!] HATA: {e}")
-        import traceback
-        traceback.print_exc()
-        return None
+    return export_forecasts()
+
 
 if __name__ == "__main__":
     main()

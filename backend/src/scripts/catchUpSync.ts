@@ -1,16 +1,14 @@
 /**
  * Catch-up Sync Script
  *
- * Bilgisayar kapalı olduğunda kaybedilen verileri otomatik çeker.
- * Database'deki en son tarihi bulur ve bugüne kadar eksik günleri doldurur.
- *
- * Kullanım:
- *   npx tsx src/scripts/catchUpSync.ts
+ * Fills missing days between the latest database date and yesterday
+ * in Europe/Istanbul time.
  */
 
 import Database from 'better-sqlite3';
 import { fetchMCP, fetchGeneration, fetchConsumption } from '../services/epiasClient.js';
 import { insertMCPData, insertGenerationData, insertConsumptionData } from '../services/database.js';
+import { ensureForecastHistoryComponentColumns } from '../services/schemaMigration.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,6 +16,7 @@ import { dirname } from 'path';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
+import { assertExpectedHourlyItems } from './catchUpValidation.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -27,20 +26,14 @@ const __dirname = dirname(__filename);
 
 const LOG_FILE = path.join(__dirname, '../../logs/catch-up-sync.log');
 
-// Log fonksiyonu
 function log(message: string) {
   const timestamp = new Date().toISOString();
   const logMessage = `[${timestamp}] ${message}`;
   console.log(logMessage);
-
-  // Log dosyasına yaz
   fs.mkdirSync(path.dirname(LOG_FILE), { recursive: true });
-  fs.appendFileSync(LOG_FILE, logMessage + '\n');
+  fs.appendFileSync(LOG_FILE, `${logMessage}\n`);
 }
 
-/**
- * Database'deki en son tarihi bulur
- */
 function getLastDate(db: Database.Database): string | null {
   const result = db.prepare(`
     SELECT MAX(date) as last_date
@@ -50,15 +43,11 @@ function getLastDate(db: Database.Database): string | null {
   return result.last_date;
 }
 
-/**
- * İki tarih arasındaki günleri hesaplar (end date DAHİL)
- */
 function getDaysBetweenInclusive(startDate: string, endDate: string): string[] {
   const days: string[] = [];
   const current = new Date(startDate);
   const end = new Date(endDate);
 
-  // Son günü de dahil et
   while (current <= end) {
     days.push(current.toISOString().split('T')[0]);
     current.setDate(current.getDate() + 1);
@@ -67,26 +56,6 @@ function getDaysBetweenInclusive(startDate: string, endDate: string): string[] {
   return days;
 }
 
-/**
- * İki tarih arasındaki günleri hesaplar (end date DAHİL DEĞİL)
- */
-function getDaysBetween(startDate: string, endDate: string): string[] {
-  const days: string[] = [];
-  const current = new Date(startDate);
-  const end = new Date(endDate);
-
-  // Son günü dahil etme (çünkü o gün henüz tamamlanmamış olabilir)
-  while (current < end) {
-    days.push(current.toISOString().split('T')[0]);
-    current.setDate(current.getDate() + 1);
-  }
-
-  return days;
-}
-
-/**
- * Tarihleri 30 günlük parçalara böler (Generation API limiti için)
- */
 function chunkDates(dates: string[], chunkSize: number = 30): string[][] {
   const chunks: string[][] = [];
   for (let i = 0; i < dates.length; i += chunkSize) {
@@ -95,165 +64,121 @@ function chunkDates(dates: string[], chunkSize: number = 30): string[][] {
   return chunks;
 }
 
-/**
- * Catch-up sync - Eksik günleri doldurur
- */
 async function catchUpSync() {
   log('============================================================');
-  log('CATCH-UP SYNC - Eksik Gun Doldurma');
+  log('CATCH-UP SYNC - Missing day fill');
   log('============================================================');
 
   const dbPath = path.join(__dirname, '../../data/energy.db');
   const db = Database(dbPath);
 
   try {
-    // 1. En son tarihi bul
+    const addedForecastColumns = ensureForecastHistoryComponentColumns(db);
+    if (addedForecastColumns.length > 0) {
+      log(`Forecast schema migrated: ${addedForecastColumns.join(', ')}`);
+    }
+
     const lastDate = getLastDate(db);
 
     if (!lastDate) {
-      log('UYARI: Database bos! Tam veri toplama scripti calistirin.');
-      return;
+      throw new Error('Database is empty. Run the full data bootstrap first.');
     }
 
-    log(`En son veri tarihi: ${lastDate}`);
+    log(`Latest data date: ${lastDate}`);
 
-    // 2. TÜRKİYE SAATİ ile çalış (EPİAŞ Türkiye verileri)
-    const TZ = 'Europe/Istanbul';
-
-    // Database'deki son tarih (sadece tarih kısmı, saat 00:00)
-    const lastDateDay = dayjs(lastDate).tz(TZ).startOf('day');
-
-    // Bugün Türkiye saati
-    const todayTR = dayjs().tz(TZ).startOf('day');
-
-    // Dün Türkiye saati (EPİAŞ verileri ~3 saat gecikmeli, 05:00'da çalıştığımızda dün kesin hazır)
-    const yesterdayTR = todayTR.subtract(1, 'day');
-
-    // Başlangıç = son tarihten 1 gün sonra
+    const timezoneName = 'Europe/Istanbul';
+    const lastDateDay = dayjs(lastDate).tz(timezoneName).startOf('day');
+    const yesterdayTR = dayjs().tz(timezoneName).startOf('day').subtract(1, 'day');
     const fromDate = lastDateDay.add(1, 'day');
-
-    // Bitiş = dün
     const toDate = yesterdayTR;
 
-    log(`Kontrol araligi: ${fromDate.format('YYYY-MM-DD')} - ${toDate.format('YYYY-MM-DD')} (dahil)`);
+    log(`Check range: ${fromDate.format('YYYY-MM-DD')} - ${toDate.format('YYYY-MM-DD')} inclusive`);
 
-    // SANITY CHECK: Eğer from > to ise eksik gün yok demektir
     if (fromDate.isAfter(toDate)) {
-      log('✅ Eksik gun yok! Database guncel.');
-      log(`   (Son veri: ${lastDateDay.format('YYYY-MM-DD')}, Hedef: ${yesterdayTR.format('YYYY-MM-DD')})`);
+      log('No missing days. Database is current.');
       return;
     }
 
-    // 4. Eksik günleri hesapla (dün dahil!)
-    const startDateStr = fromDate.format('YYYY-MM-DD');
-    const yesterdayStr = toDate.format('YYYY-MM-DD');
-    const missingDays = getDaysBetweenInclusive(startDateStr, yesterdayStr);
+    const missingDays = getDaysBetweenInclusive(fromDate.format('YYYY-MM-DD'), toDate.format('YYYY-MM-DD'));
 
     if (missingDays.length === 0) {
-      log('✅ Eksik gun yok! Database guncel.');
+      log('No missing days. Database is current.');
       return;
     }
 
-    log(`⚠️  ${missingDays.length} eksik gun bulundu: ${missingDays[0]} - ${missingDays[missingDays.length - 1]}`);
+    const startDate = missingDays[0];
+    const endDate = missingDays[missingDays.length - 1];
+    log(`${missingDays.length} missing day(s): ${startDate} - ${endDate}`);
 
-    // 5. MCP verileri çek (1 yıl limiti var ama bizim max 365 gün eksik olamaz)
-    if (missingDays.length > 0) {
-      log('------------------------------------------------------------');
-      log('MCP (FIYAT) VERISI CEKILIYOR...');
-      log('------------------------------------------------------------');
-
-      try {
-        const mcpResponse = await fetchMCP(missingDays[0], missingDays[missingDays.length - 1]);
-        const insertedMCP = insertMCPData(mcpResponse.items);
-        log(`✅ ${insertedMCP} MCP kaydi eklendi`);
-      } catch (error) {
-        log(`❌ MCP verisi cekilemedi: ${error}`);
-      }
-    }
-
-    // 6. Generation verileri çek (30 günlük parçalara böl)
     log('------------------------------------------------------------');
-    log('GENERATION (URETIM) VERISI CEKILIYOR...');
+    log('Fetching MCP price data...');
     log('------------------------------------------------------------');
+    const mcpResponse = await fetchMCP(startDate, endDate);
+    assertExpectedHourlyItems('MCP', mcpResponse.items, missingDays.length);
+    const insertedMCP = insertMCPData(mcpResponse.items);
+    log(`${insertedMCP} MCP records inserted`);
 
+    log('------------------------------------------------------------');
+    log('Fetching generation data...');
+    log('------------------------------------------------------------');
     const generationChunks = chunkDates(missingDays, 30);
-    log(`${generationChunks.length} parca halinde cekilecek (API limiti 30 gun)`);
-
     let totalGeneration = 0;
+
     for (let i = 0; i < generationChunks.length; i++) {
       const chunk = generationChunks[i];
       const chunkStart = chunk[0];
       const chunkEnd = chunk[chunk.length - 1];
 
-      log(`Parca ${i + 1}/${generationChunks.length}: ${chunkStart} - ${chunkEnd}`);
+      log(`Chunk ${i + 1}/${generationChunks.length}: ${chunkStart} - ${chunkEnd}`);
+      const genResponse = await fetchGeneration(chunkStart, chunkEnd);
+      assertExpectedHourlyItems('Generation', genResponse.items, chunk.length);
+      const insertedGen = insertGenerationData(genResponse.items);
+      totalGeneration += insertedGen;
+      log(`${insertedGen} generation records inserted`);
 
-      try {
-        const genResponse = await fetchGeneration(chunkStart, chunkEnd);
-        const insertedGen = insertGenerationData(genResponse.items);
-        totalGeneration += insertedGen;
-        log(`✅ ${insertedGen} Generation kaydi eklendi`);
-
-        // Rate limiting için kısa bekleme
-        if (i < generationChunks.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-      } catch (error) {
-        log(`❌ Generation verisi cekilemedi (Parca ${i + 1}): ${error}`);
+      if (i < generationChunks.length - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
 
-    log(`Toplam ${totalGeneration} Generation kaydi eklendi`);
+    log(`Total generation records inserted: ${totalGeneration}`);
 
-    // 7. Consumption verileri çek (1 yıl limiti var)
     log('------------------------------------------------------------');
-    log('CONSUMPTION (TUKETIM) VERISI CEKILIYOR...');
+    log('Fetching consumption data...');
     log('------------------------------------------------------------');
-
-    try {
-      const consResponse = await fetchConsumption(missingDays[0], missingDays[missingDays.length - 1]);
-      const insertedCons = insertConsumptionData(consResponse.items);
-      log(`✅ ${insertedCons} Consumption kaydi eklendi`);
-    } catch (error) {
-      log(`❌ Consumption verisi cekilemedi: ${error}`);
-    }
-
-    // 8. Özet
-    log('============================================================');
-    log('CATCH-UP SYNC TAMAMLANDI');
-    log('============================================================');
+    const consResponse = await fetchConsumption(startDate, endDate);
+    assertExpectedHourlyItems('Consumption', consResponse.items, missingDays.length);
+    const insertedCons = insertConsumptionData(consResponse.items);
+    log(`${insertedCons} consumption records inserted`);
 
     const finalCount = db.prepare('SELECT COUNT(*) as count FROM mcp_data').get() as { count: number };
-    log(`Toplam MCP kaydi: ${finalCount.count}`);
-
     const finalGenCount = db.prepare('SELECT COUNT(*) as count FROM generation_data').get() as { count: number };
-    log(`Toplam Generation kaydi: ${finalGenCount.count}`);
-
     const finalConsCount = db.prepare('SELECT COUNT(*) as count FROM consumption_data').get() as { count: number };
-    log(`Toplam Consumption kaydi: ${finalConsCount.count}`);
 
     log('============================================================');
-
+    log('CATCH-UP SYNC COMPLETED');
+    log(`Total MCP records: ${finalCount.count}`);
+    log(`Total generation records: ${finalGenCount.count}`);
+    log(`Total consumption records: ${finalConsCount.count}`);
+    log('============================================================');
   } catch (error) {
-    log(`❌ HATA: ${error}`);
+    log(`ERROR: ${error instanceof Error ? error.message : String(error)}`);
     throw error;
   } finally {
-    // WAL checkpoint - Değişiklikleri ana DB dosyasına yaz
-    log('🔄 WAL checkpoint yapiliyor (degisiklikleri DB dosyasina yazma)...');
+    log('Running WAL checkpoint...');
     db.pragma('wal_checkpoint(TRUNCATE)');
-    log('✅ WAL checkpoint tamamlandi');
-
+    log('WAL checkpoint completed');
     db.close();
   }
 }
 
-// Script çalıştır
 catchUpSync()
   .then(() => {
-    log('Catch-up sync tamamlandi');
+    log('Catch-up sync finished');
     process.exit(0);
   })
   .catch((error) => {
-    log('Catch-up sync basarisiz');
+    log('Catch-up sync failed');
     console.error(error);
     process.exit(1);
   });

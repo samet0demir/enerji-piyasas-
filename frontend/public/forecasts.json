@@ -1,853 +1,1722 @@
 {
-  "generated_at": "2026-05-04T06:33:35.724636",
+  "generated_at": "2026-05-04T23:57:28.399021",
+  "model_type": "Prophet + XGBoost + LSTM Ensemble",
+  "models_count": 3,
+  "quality": {
+    "forecast_hours": 168,
+    "min_prediction": 0.0,
+    "max_prediction": 2894.328082545183,
+    "avg_prediction": 522.8845625130441,
+    "invalid_predictions": 0,
+    "model_mae": 253.80423932664158,
+    "seasonal_naive_mae": 568.1158333333334,
+    "baseline_improvement": 0.5532526565269555,
+    "validation_start": "2026-04-27T00:00:00",
+    "validation_end": "2026-05-03T23:00:00",
+    "current_forecast": {
+      "forecast_hours": 168,
+      "min_prediction": 185.62568849965706,
+      "max_prediction": 1389.238948865935,
+      "avg_prediction": 773.3355487101928,
+      "invalid_predictions": 0
+    },
+    "clipped_negative_predictions": 0,
+    "model_type": "Prophet + XGBoost + LSTM Ensemble",
+    "models_count": 3,
+    "last_week_mape": 196.84896933282423,
+    "last_week_mae": 553.5274577122374,
+    "last_week_rmse": 723.106234389302
+  },
   "current_week": {
     "start": "2026-05-04",
     "end": "2026-05-10",
     "forecasts": [
       {
         "datetime": "2026-05-04 00:00:00",
-        "predicted": 421.51,
-        "actual": null
+        "predicted": 550.85,
+        "actual": null,
+        "prophet": 985.35,
+        "xgboost": -300.09,
+        "lstm": 0.0,
+        "lower": 550.85,
+        "upper": 550.85
       },
       {
         "datetime": "2026-05-04 01:00:00",
-        "predicted": 385.63,
-        "actual": null
+        "predicted": 415.86,
+        "actual": null,
+        "prophet": 811.45,
+        "xgboost": -348.2,
+        "lstm": 0.0,
+        "lower": 415.86,
+        "upper": 415.86
       },
       {
         "datetime": "2026-05-04 02:00:00",
-        "predicted": 335.32,
-        "actual": null
+        "predicted": 371.05,
+        "actual": null,
+        "prophet": 699.54,
+        "xgboost": -266.6,
+        "lstm": 0.0,
+        "lower": 371.05,
+        "upper": 371.05
       },
       {
         "datetime": "2026-05-04 03:00:00",
-        "predicted": 259.07,
-        "actual": null
+        "predicted": 341.69,
+        "actual": null,
+        "prophet": 654.75,
+        "xgboost": -264.52,
+        "lstm": 0.0,
+        "lower": 341.69,
+        "upper": 341.69
       },
       {
         "datetime": "2026-05-04 04:00:00",
-        "predicted": 200.66,
-        "actual": null
+        "predicted": 352.81,
+        "actual": null,
+        "prophet": 672.15,
+        "xgboost": -266.11,
+        "lstm": 0.0,
+        "lower": 352.81,
+        "upper": 352.81
       },
       {
         "datetime": "2026-05-04 05:00:00",
-        "predicted": 222.73,
-        "actual": null
+        "predicted": 377.34,
+        "actual": null,
+        "prophet": 709.85,
+        "xgboost": -268.34,
+        "lstm": 0.0,
+        "lower": 377.34,
+        "upper": 377.34
       },
       {
         "datetime": "2026-05-04 06:00:00",
-        "predicted": 343.13,
-        "actual": null
+        "predicted": 389.01,
+        "actual": null,
+        "prophet": 725.89,
+        "xgboost": -265.99,
+        "lstm": 0.0,
+        "lower": 389.01,
+        "upper": 389.01
       },
       {
         "datetime": "2026-05-04 07:00:00",
-        "predicted": 502.44,
-        "actual": null
+        "predicted": 387.31,
+        "actual": null,
+        "prophet": 748.34,
+        "xgboost": -310.96,
+        "lstm": 0.0,
+        "lower": 387.31,
+        "upper": 387.31
       },
       {
         "datetime": "2026-05-04 08:00:00",
-        "predicted": 597.01,
-        "actual": null
+        "predicted": 623.92,
+        "actual": null,
+        "prophet": 965.44,
+        "xgboost": -68.8,
+        "lstm": 0.0,
+        "lower": 623.92,
+        "upper": 623.92
       },
       {
         "datetime": "2026-05-04 09:00:00",
-        "predicted": 553.87,
-        "actual": null
+        "predicted": 523.04,
+        "actual": null,
+        "prophet": 866.74,
+        "xgboost": -160.98,
+        "lstm": 0.0,
+        "lower": 523.04,
+        "upper": 523.04
       },
       {
         "datetime": "2026-05-04 10:00:00",
-        "predicted": 386.62,
-        "actual": null
+        "predicted": 413.44,
+        "actual": null,
+        "prophet": 663.67,
+        "xgboost": -88.66,
+        "lstm": 0.0,
+        "lower": 413.44,
+        "upper": 413.44
       },
       {
         "datetime": "2026-05-04 11:00:00",
-        "predicted": 187.64,
-        "actual": null
+        "predicted": 316.39,
+        "actual": null,
+        "prophet": 482.18,
+        "xgboost": -21.58,
+        "lstm": 0.0,
+        "lower": 316.39,
+        "upper": 316.39
       },
       {
         "datetime": "2026-05-04 12:00:00",
-        "predicted": 66.16,
-        "actual": null
+        "predicted": 185.63,
+        "actual": null,
+        "prophet": 285.2,
+        "xgboost": -16.82,
+        "lstm": 0.0,
+        "lower": 185.63,
+        "upper": 185.63
       },
       {
         "datetime": "2026-05-04 13:00:00",
-        "predicted": 84.0,
-        "actual": null
+        "predicted": 227.0,
+        "actual": null,
+        "prophet": 364.92,
+        "xgboost": -49.61,
+        "lstm": 0.0,
+        "lower": 227.0,
+        "upper": 227.0
       },
       {
         "datetime": "2026-05-04 14:00:00",
-        "predicted": 235.1,
-        "actual": null
+        "predicted": 351.55,
+        "actual": null,
+        "prophet": 550.55,
+        "xgboost": -50.58,
+        "lstm": 0.0,
+        "lower": 351.55,
+        "upper": 351.55
       },
       {
         "datetime": "2026-05-04 15:00:00",
-        "predicted": 471.16,
-        "actual": null
+        "predicted": 402.77,
+        "actual": null,
+        "prophet": 682.17,
+        "xgboost": -150.49,
+        "lstm": 0.0,
+        "lower": 402.77,
+        "upper": 402.77
       },
       {
         "datetime": "2026-05-04 16:00:00",
-        "predicted": 738.33,
-        "actual": null
+        "predicted": 544.18,
+        "actual": null,
+        "prophet": 894.78,
+        "xgboost": -154.93,
+        "lstm": 0.0,
+        "lower": 544.18,
+        "upper": 544.18
       },
       {
         "datetime": "2026-05-04 17:00:00",
-        "predicted": 992.03,
-        "actual": null
+        "predicted": 690.35,
+        "actual": null,
+        "prophet": 1107.35,
+        "xgboost": -146.53,
+        "lstm": 0.0,
+        "lower": 690.35,
+        "upper": 690.35
       },
       {
         "datetime": "2026-05-04 18:00:00",
-        "predicted": 1190.14,
-        "actual": null
+        "predicted": 767.96,
+        "actual": null,
+        "prophet": 1267.32,
+        "xgboost": -226.87,
+        "lstm": 0.0,
+        "lower": 767.96,
+        "upper": 767.96
       },
       {
         "datetime": "2026-05-04 19:00:00",
-        "predicted": 1290.27,
-        "actual": null
+        "predicted": 792.76,
+        "actual": null,
+        "prophet": 1291.94,
+        "xgboost": -204.87,
+        "lstm": 0.0,
+        "lower": 792.76,
+        "upper": 792.76
       },
       {
         "datetime": "2026-05-04 20:00:00",
-        "predicted": 1268.21,
-        "actual": null
+        "predicted": 781.42,
+        "actual": null,
+        "prophet": 1297.15,
+        "xgboost": -244.56,
+        "lstm": 0.0,
+        "lower": 781.42,
+        "upper": 781.42
       },
       {
         "datetime": "2026-05-04 21:00:00",
-        "predicted": 1142.94,
-        "actual": null
+        "predicted": 727.02,
+        "actual": null,
+        "prophet": 1207.77,
+        "xgboost": -229.2,
+        "lstm": 0.0,
+        "lower": 727.02,
+        "upper": 727.02
       },
       {
         "datetime": "2026-05-04 22:00:00",
-        "predicted": 976.64,
-        "actual": null
+        "predicted": 590.04,
+        "actual": null,
+        "prophet": 1000.43,
+        "xgboost": -222.42,
+        "lstm": 0.0,
+        "lower": 590.04,
+        "upper": 590.04
       },
       {
         "datetime": "2026-05-04 23:00:00",
-        "predicted": 838.02,
-        "actual": null
+        "predicted": 456.69,
+        "actual": null,
+        "prophet": 796.63,
+        "xgboost": -212.29,
+        "lstm": 0.0,
+        "lower": 456.69,
+        "upper": 456.69
       },
       {
         "datetime": "2026-05-05 00:00:00",
-        "predicted": 755.38,
-        "actual": null
+        "predicted": 1108.98,
+        "actual": null,
+        "prophet": 980.18,
+        "xgboost": -226.15,
+        "lstm": 1632.37,
+        "lower": 1108.98,
+        "upper": 1108.98
       },
       {
         "datetime": "2026-05-05 01:00:00",
-        "predicted": 702.42,
-        "actual": null
+        "predicted": 953.04,
+        "actual": null,
+        "prophet": 786.59,
+        "xgboost": -279.45,
+        "lstm": 1614.83,
+        "lower": 953.04,
+        "upper": 953.04
       },
       {
         "datetime": "2026-05-05 02:00:00",
-        "predicted": 633.36,
-        "actual": null
+        "predicted": 843.59,
+        "actual": null,
+        "prophet": 655.11,
+        "xgboost": -205.91,
+        "lstm": 1466.65,
+        "lower": 843.59,
+        "upper": 843.59
       },
       {
         "datetime": "2026-05-05 03:00:00",
-        "predicted": 536.9,
-        "actual": null
+        "predicted": 759.39,
+        "actual": null,
+        "prophet": 591.04,
+        "xgboost": -203.83,
+        "lstm": 1338.67,
+        "lower": 759.39,
+        "upper": 759.39
       },
       {
         "datetime": "2026-05-05 04:00:00",
-        "predicted": 457.03,
-        "actual": null
+        "predicted": 728.93,
+        "actual": null,
+        "prophet": 589.64,
+        "xgboost": -205.43,
+        "lstm": 1250.24,
+        "lower": 728.93,
+        "upper": 728.93
       },
       {
         "datetime": "2026-05-05 05:00:00",
-        "predicted": 456.62,
-        "actual": null
+        "predicted": 722.43,
+        "actual": null,
+        "prophet": 609.17,
+        "xgboost": -204.1,
+        "lstm": 1188.69,
+        "lower": 722.43,
+        "upper": 722.43
       },
       {
         "datetime": "2026-05-05 06:00:00",
-        "predicted": 553.73,
-        "actual": null
+        "predicted": 717.18,
+        "actual": null,
+        "prophet": 607.84,
+        "xgboost": -202.72,
+        "lstm": 1173.79,
+        "lower": 717.18,
+        "upper": 717.18
       },
       {
         "datetime": "2026-05-05 07:00:00",
-        "predicted": 689.19,
-        "actual": null
+        "predicted": 703.16,
+        "actual": null,
+        "prophet": 613.87,
+        "xgboost": -247.69,
+        "lstm": 1169.92,
+        "lower": 703.16,
+        "upper": 703.16
       },
       {
         "datetime": "2026-05-05 08:00:00",
-        "predicted": 759.57,
-        "actual": null
+        "predicted": 925.12,
+        "actual": null,
+        "prophet": 815.64,
+        "xgboost": -36.66,
+        "lstm": 1192.24,
+        "lower": 925.12,
+        "upper": 925.12
       },
       {
         "datetime": "2026-05-05 09:00:00",
-        "predicted": 692.14,
-        "actual": null
+        "predicted": 883.86,
+        "actual": null,
+        "prophet": 702.83,
+        "xgboost": -128.83,
+        "lstm": 1403.52,
+        "lower": 883.86,
+        "upper": 883.86
       },
       {
         "datetime": "2026-05-05 10:00:00",
-        "predicted": 500.74,
-        "actual": null
+        "predicted": 703.89,
+        "actual": null,
+        "prophet": 486.99,
+        "xgboost": -54.7,
+        "lstm": 1212.6,
+        "lower": 703.89,
+        "upper": 703.89
       },
       {
         "datetime": "2026-05-05 11:00:00",
-        "predicted": 277.96,
-        "actual": null
+        "predicted": 555.14,
+        "actual": null,
+        "prophet": 294.16,
+        "xgboost": 1.82,
+        "lstm": 1089.92,
+        "lower": 555.14,
+        "upper": 555.14
       },
       {
         "datetime": "2026-05-05 12:00:00",
-        "predicted": 133.24,
-        "actual": null
+        "predicted": 335.59,
+        "actual": null,
+        "prophet": 87.38,
+        "xgboost": 6.58,
+        "lstm": 838.66,
+        "lower": 335.59,
+        "upper": 335.59
       },
       {
         "datetime": "2026-05-05 13:00:00",
-        "predicted": 128.62,
-        "actual": null
+        "predicted": 414.74,
+        "actual": null,
+        "prophet": 158.89,
+        "xgboost": -30.71,
+        "lstm": 976.16,
+        "lower": 414.74,
+        "upper": 414.74
       },
       {
         "datetime": "2026-05-05 14:00:00",
-        "predicted": 258.22,
-        "actual": null
+        "predicted": 595.21,
+        "actual": null,
+        "prophet": 337.95,
+        "xgboost": -37.69,
+        "lstm": 1167.5,
+        "lower": 595.21,
+        "upper": 595.21
       },
       {
         "datetime": "2026-05-05 15:00:00",
-        "predicted": 473.92,
-        "actual": null
+        "predicted": 701.79,
+        "actual": null,
+        "prophet": 464.7,
+        "xgboost": -138.97,
+        "lstm": 1348.34,
+        "lower": 701.79,
+        "upper": 701.79
       },
       {
         "datetime": "2026-05-05 16:00:00",
-        "predicted": 722.03,
-        "actual": null
+        "predicted": 905.25,
+        "actual": null,
+        "prophet": 674.14,
+        "xgboost": -145.86,
+        "lstm": 1547.38,
+        "lower": 905.25,
+        "upper": 905.25
       },
       {
         "datetime": "2026-05-05 17:00:00",
-        "predicted": 958.11,
-        "actual": null
+        "predicted": 1284.94,
+        "actual": null,
+        "prophet": 885.24,
+        "xgboost": -127.2,
+        "lstm": 2252.55,
+        "lower": 1284.94,
+        "upper": 1284.94
       },
       {
         "datetime": "2026-05-05 18:00:00",
-        "predicted": 1140.15,
-        "actual": null
+        "predicted": 1379.12,
+        "actual": null,
+        "prophet": 1045.43,
+        "xgboost": -205.23,
+        "lstm": 2300.12,
+        "lower": 1379.12,
+        "upper": 1379.12
       },
       {
         "datetime": "2026-05-05 19:00:00",
-        "predicted": 1225.88,
-        "actual": null
+        "predicted": 1343.2,
+        "actual": null,
+        "prophet": 1071.92,
+        "xgboost": -175.32,
+        "lstm": 2101.62,
+        "lower": 1343.2,
+        "upper": 1343.2
       },
       {
         "datetime": "2026-05-05 20:00:00",
-        "predicted": 1191.18,
-        "actual": null
+        "predicted": 1314.05,
+        "actual": null,
+        "prophet": 1080.6,
+        "xgboost": -207.08,
+        "lstm": 2030.94,
+        "lower": 1314.05,
+        "upper": 1314.05
       },
       {
         "datetime": "2026-05-05 21:00:00",
-        "predicted": 1055.06,
-        "actual": null
+        "predicted": 1250.96,
+        "actual": null,
+        "prophet": 996.22,
+        "xgboost": -188.72,
+        "lstm": 1990.67,
+        "lower": 1250.96,
+        "upper": 1250.96
       },
       {
         "datetime": "2026-05-05 22:00:00",
-        "predicted": 879.75,
-        "actual": null
+        "predicted": 1048.41,
+        "actual": null,
+        "prophet": 795.33,
+        "xgboost": -189.1,
+        "lstm": 1785.16,
+        "lower": 1048.41,
+        "upper": 1048.41
       },
       {
         "datetime": "2026-05-05 23:00:00",
-        "predicted": 734.0,
-        "actual": null
+        "predicted": 820.84,
+        "actual": null,
+        "prophet": 599.33,
+        "xgboost": -176.73,
+        "lstm": 1478.51,
+        "lower": 820.84,
+        "upper": 820.84
       },
       {
         "datetime": "2026-05-06 00:00:00",
-        "predicted": 646.07,
-        "actual": null
+        "predicted": 991.22,
+        "actual": null,
+        "prophet": 791.91,
+        "xgboost": -190.91,
+        "lstm": 1619.41,
+        "lower": 991.22,
+        "upper": 991.22
       },
       {
         "datetime": "2026-05-06 01:00:00",
-        "predicted": 589.65,
-        "actual": null
+        "predicted": 857.7,
+        "actual": null,
+        "prophet": 608.47,
+        "xgboost": -203.33,
+        "lstm": 1602.77,
+        "lower": 857.7,
+        "upper": 857.7
       },
       {
         "datetime": "2026-05-06 02:00:00",
-        "predicted": 518.9,
-        "actual": null
+        "predicted": 763.13,
+        "actual": null,
+        "prophet": 488.12,
+        "xgboost": -124.79,
+        "lstm": 1471.49,
+        "lower": 763.13,
+        "upper": 763.13
       },
       {
         "datetime": "2026-05-06 03:00:00",
-        "predicted": 422.48,
-        "actual": null
+        "predicted": 696.94,
+        "actual": null,
+        "prophet": 436.03,
+        "xgboost": -123.85,
+        "lstm": 1375.2,
+        "lower": 696.94,
+        "upper": 696.94
       },
       {
         "datetime": "2026-05-06 04:00:00",
-        "predicted": 344.26,
-        "actual": null
+        "predicted": 676.13,
+        "actual": null,
+        "prophet": 447.31,
+        "xgboost": -125.44,
+        "lstm": 1290.2,
+        "lower": 676.13,
+        "upper": 676.13
       },
       {
         "datetime": "2026-05-06 05:00:00",
-        "predicted": 347.04,
-        "actual": null
+        "predicted": 672.66,
+        "actual": null,
+        "prophet": 480.05,
+        "xgboost": -125.49,
+        "lstm": 1212.32,
+        "lower": 672.66,
+        "upper": 672.66
       },
       {
         "datetime": "2026-05-06 06:00:00",
-        "predicted": 448.74,
-        "actual": null
+        "predicted": 673.03,
+        "actual": null,
+        "prophet": 492.32,
+        "xgboost": -119.32,
+        "lstm": 1181.14,
+        "lower": 673.03,
+        "upper": 673.03
       },
       {
         "datetime": "2026-05-06 07:00:00",
-        "predicted": 590.07,
-        "actual": null
+        "predicted": 659.77,
+        "actual": null,
+        "prophet": 512.19,
+        "xgboost": -177.96,
+        "lstm": 1166.75,
+        "lower": 659.77,
+        "upper": 659.77
       },
       {
         "datetime": "2026-05-06 08:00:00",
-        "predicted": 667.47,
-        "actual": null
+        "predicted": 872.9,
+        "actual": null,
+        "prophet": 727.86,
+        "xgboost": -10.1,
+        "lstm": 1182.81,
+        "lower": 872.9,
+        "upper": 872.9
       },
       {
         "datetime": "2026-05-06 09:00:00",
-        "predicted": 608.04,
-        "actual": null
+        "predicted": 845.45,
+        "actual": null,
+        "prophet": 628.88,
+        "xgboost": -97.16,
+        "lstm": 1402.03,
+        "lower": 845.45,
+        "upper": 845.45
       },
       {
         "datetime": "2026-05-06 10:00:00",
-        "predicted": 425.44,
-        "actual": null
+        "predicted": 672.33,
+        "actual": null,
+        "prophet": 426.64,
+        "xgboost": -17.63,
+        "lstm": 1197.91,
+        "lower": 672.33,
+        "upper": 672.33
       },
       {
         "datetime": "2026-05-06 11:00:00",
-        "predicted": 212.14,
-        "actual": null
+        "predicted": 536.04,
+        "actual": null,
+        "prophet": 247.03,
+        "xgboost": 41.89,
+        "lstm": 1082.69,
+        "lower": 536.04,
+        "upper": 536.04
       },
       {
         "datetime": "2026-05-06 12:00:00",
-        "predicted": 77.39,
-        "actual": null
+        "predicted": 329.2,
+        "actual": null,
+        "prophet": 52.95,
+        "xgboost": 56.54,
+        "lstm": 832.86,
+        "lower": 329.2,
+        "upper": 329.2
       },
       {
         "datetime": "2026-05-06 13:00:00",
-        "predicted": 83.06,
-        "actual": null
+        "predicted": 402.77,
+        "actual": null,
+        "prophet": 136.53,
+        "xgboost": 14.86,
+        "lstm": 933.49,
+        "lower": 402.77,
+        "upper": 402.77
       },
       {
         "datetime": "2026-05-06 14:00:00",
-        "predicted": 223.1,
-        "actual": null
+        "predicted": 586.66,
+        "actual": null,
+        "prophet": 326.91,
+        "xgboost": 0.75,
+        "lstm": 1120.16,
+        "lower": 586.66,
+        "upper": 586.66
       },
       {
         "datetime": "2026-05-06 15:00:00",
-        "predicted": 449.23,
-        "actual": null
+        "predicted": 698.92,
+        "actual": null,
+        "prophet": 464.1,
+        "xgboost": -109.23,
+        "lstm": 1306.8,
+        "lower": 698.92,
+        "upper": 698.92
       },
       {
         "datetime": "2026-05-06 16:00:00",
-        "predicted": 707.59,
-        "actual": null
+        "predicted": 876.46,
+        "actual": null,
+        "prophet": 683.03,
+        "xgboost": -159.88,
+        "lstm": 1457.1,
+        "lower": 876.46,
+        "upper": 876.46
       },
       {
         "datetime": "2026-05-06 17:00:00",
-        "predicted": 953.6,
-        "actual": null
+        "predicted": 1289.1,
+        "actual": null,
+        "prophet": 902.59,
+        "xgboost": -141.26,
+        "lstm": 2245.65,
+        "lower": 1289.1,
+        "upper": 1289.1
       },
       {
         "datetime": "2026-05-06 18:00:00",
-        "predicted": 1145.11,
-        "actual": null
+        "predicted": 1389.24,
+        "actual": null,
+        "prophet": 1070.13,
+        "xgboost": -218.87,
+        "lstm": 2295.83,
+        "lower": 1389.24,
+        "upper": 1389.24
       },
       {
         "datetime": "2026-05-06 19:00:00",
-        "predicted": 1239.71,
-        "actual": null
+        "predicted": 1357.89,
+        "actual": null,
+        "prophet": 1102.82,
+        "xgboost": -191.64,
+        "lstm": 2101.6,
+        "lower": 1357.89,
+        "upper": 1357.89
       },
       {
         "datetime": "2026-05-06 20:00:00",
-        "predicted": 1213.14,
-        "actual": null
+        "predicted": 1334.38,
+        "actual": null,
+        "prophet": 1116.52,
+        "xgboost": -221.55,
+        "lstm": 2035.73,
+        "lower": 1334.38,
+        "upper": 1334.38
       },
       {
         "datetime": "2026-05-06 21:00:00",
-        "predicted": 1084.33,
-        "actual": null
+        "predicted": 1273.75,
+        "actual": null,
+        "prophet": 1035.96,
+        "xgboost": -203.19,
+        "lstm": 1995.16,
+        "lower": 1273.75,
+        "upper": 1273.75
       },
       {
         "datetime": "2026-05-06 22:00:00",
-        "predicted": 915.41,
-        "actual": null
+        "predicted": 1074.37,
+        "actual": null,
+        "prophet": 837.67,
+        "xgboost": -198.11,
+        "lstm": 1787.71,
+        "lower": 1074.37,
+        "upper": 1074.37
       },
       {
         "datetime": "2026-05-06 23:00:00",
-        "predicted": 775.04,
-        "actual": null
+        "predicted": 846.7,
+        "actual": null,
+        "prophet": 643.08,
+        "xgboost": -186.24,
+        "lstm": 1478.44,
+        "lower": 846.7,
+        "upper": 846.7
       },
       {
         "datetime": "2026-05-07 00:00:00",
-        "predicted": 691.45,
-        "actual": null
+        "predicted": 1010.98,
+        "actual": null,
+        "prophet": 835.91,
+        "xgboost": -200.53,
+        "lstm": 1600.33,
+        "lower": 1010.98,
+        "upper": 1010.98
       },
       {
         "datetime": "2026-05-07 01:00:00",
-        "predicted": 638.25,
-        "actual": null
+        "predicted": 878.9,
+        "actual": null,
+        "prophet": 651.58,
+        "xgboost": -211.88,
+        "lstm": 1588.67,
+        "lower": 878.9,
+        "upper": 878.9
       },
       {
         "datetime": "2026-05-07 02:00:00",
-        "predicted": 569.6,
-        "actual": null
+        "predicted": 787.94,
+        "actual": null,
+        "prophet": 529.27,
+        "xgboost": -133.2,
+        "lstm": 1472.3,
+        "lower": 787.94,
+        "upper": 787.94
       },
       {
         "datetime": "2026-05-07 03:00:00",
-        "predicted": 474.12,
-        "actual": null
+        "predicted": 725.87,
+        "actual": null,
+        "prophet": 474.22,
+        "xgboost": -132.26,
+        "lstm": 1394.72,
+        "lower": 725.87,
+        "upper": 725.87
       },
       {
         "datetime": "2026-05-07 04:00:00",
-        "predicted": 395.72,
-        "actual": null
+        "predicted": 706.61,
+        "actual": null,
+        "prophet": 481.6,
+        "xgboost": -133.86,
+        "lstm": 1322.46,
+        "lower": 706.61,
+        "upper": 706.61
       },
       {
         "datetime": "2026-05-07 05:00:00",
-        "predicted": 397.19,
-        "actual": null
+        "predicted": 705.69,
+        "actual": null,
+        "prophet": 509.62,
+        "xgboost": -133.9,
+        "lstm": 1262.06,
+        "lower": 705.69,
+        "upper": 705.69
       },
       {
         "datetime": "2026-05-07 06:00:00",
-        "predicted": 496.52,
-        "actual": null
+        "predicted": 697.14,
+        "actual": null,
+        "prophet": 516.43,
+        "xgboost": -127.73,
+        "lstm": 1214.86,
+        "lower": 697.14,
+        "upper": 697.14
       },
       {
         "datetime": "2026-05-07 07:00:00",
-        "predicted": 634.46,
-        "actual": null
+        "predicted": 676.27,
+        "actual": null,
+        "prophet": 530.21,
+        "xgboost": -181.96,
+        "lstm": 1184.68,
+        "lower": 676.27,
+        "upper": 676.27
       },
       {
         "datetime": "2026-05-07 08:00:00",
-        "predicted": 707.51,
-        "actual": null
+        "predicted": 880.8,
+        "actual": null,
+        "prophet": 739.28,
+        "xgboost": -11.27,
+        "lstm": 1184.83,
+        "lower": 880.8,
+        "upper": 880.8
       },
       {
         "datetime": "2026-05-07 09:00:00",
-        "predicted": 642.85,
-        "actual": null
+        "predicted": 851.23,
+        "actual": null,
+        "prophet": 633.28,
+        "xgboost": -94.03,
+        "lstm": 1407.05,
+        "lower": 851.23,
+        "upper": 851.23
       },
       {
         "datetime": "2026-05-07 10:00:00",
-        "predicted": 454.25,
-        "actual": null
+        "predicted": 672.46,
+        "actual": null,
+        "prophet": 423.76,
+        "xgboost": -18.8,
+        "lstm": 1205.54,
+        "lower": 672.46,
+        "upper": 672.46
       },
       {
         "datetime": "2026-05-07 11:00:00",
-        "predicted": 234.25,
-        "actual": null
+        "predicted": 529.39,
+        "actual": null,
+        "prophet": 236.71,
+        "xgboost": 39.12,
+        "lstm": 1086.78,
+        "lower": 529.39,
+        "upper": 529.39
       },
       {
         "datetime": "2026-05-07 12:00:00",
-        "predicted": 92.23,
-        "actual": null
+        "predicted": 316.45,
+        "actual": null,
+        "prophet": 35.17,
+        "xgboost": 54.79,
+        "lstm": 832.47,
+        "lower": 316.45,
+        "upper": 316.45
       },
       {
         "datetime": "2026-05-07 13:00:00",
-        "predicted": 90.16,
-        "actual": null
+        "predicted": 374.08,
+        "actual": null,
+        "prophet": 111.35,
+        "xgboost": 11.56,
+        "lstm": 901.34,
+        "lower": 374.08,
+        "upper": 374.08
       },
       {
         "datetime": "2026-05-07 14:00:00",
-        "predicted": 222.13,
-        "actual": null
+        "predicted": 553.5,
+        "actual": null,
+        "prophet": 294.55,
+        "xgboost": 2.29,
+        "lstm": 1083.56,
+        "lower": 553.5,
+        "upper": 553.5
       },
       {
         "datetime": "2026-05-07 15:00:00",
-        "predicted": 439.95,
-        "actual": null
+        "predicted": 653.67,
+        "actual": null,
+        "prophet": 424.88,
+        "xgboost": -106.62,
+        "lstm": 1246.17,
+        "lower": 653.67,
+        "upper": 653.67
       },
       {
         "datetime": "2026-05-07 16:00:00",
-        "predicted": 689.91,
-        "actual": null
+        "predicted": 825.52,
+        "actual": null,
+        "prophet": 637.36,
+        "xgboost": -160.69,
+        "lstm": 1396.23,
+        "lower": 825.52,
+        "upper": 825.52
       },
       {
         "datetime": "2026-05-07 17:00:00",
-        "predicted": 927.53,
-        "actual": null
+        "predicted": 1251.43,
+        "actual": null,
+        "prophet": 850.98,
+        "xgboost": -145.31,
+        "lstm": 2241.27,
+        "lower": 1251.43,
+        "upper": 1251.43
       },
       {
         "datetime": "2026-05-07 18:00:00",
-        "predicted": 1110.78,
-        "actual": null
+        "predicted": 1342.83,
+        "actual": null,
+        "prophet": 1013.2,
+        "xgboost": -236.45,
+        "lstm": 2291.16,
+        "lower": 1342.83,
+        "upper": 1342.83
       },
       {
         "datetime": "2026-05-07 19:00:00",
-        "predicted": 1197.36,
-        "actual": null
+        "predicted": 1309.87,
+        "actual": null,
+        "prophet": 1041.25,
+        "xgboost": -209.22,
+        "lstm": 2101.58,
+        "lower": 1309.87,
+        "upper": 1309.87
       },
       {
         "datetime": "2026-05-07 20:00:00",
-        "predicted": 1163.14,
-        "actual": null
+        "predicted": 1285.31,
+        "actual": null,
+        "prophet": 1051.06,
+        "xgboost": -239.13,
+        "lstm": 2040.48,
+        "lower": 1285.31,
+        "upper": 1285.31
       },
       {
         "datetime": "2026-05-07 21:00:00",
-        "predicted": 1027.11,
-        "actual": null
+        "predicted": 1223.55,
+        "actual": null,
+        "prophet": 967.4,
+        "xgboost": -217.93,
+        "lstm": 1999.55,
+        "lower": 1223.55,
+        "upper": 1223.55
       },
       {
         "datetime": "2026-05-07 22:00:00",
-        "predicted": 851.52,
-        "actual": null
+        "predicted": 1025.04,
+        "actual": null,
+        "prophet": 766.87,
+        "xgboost": -204.87,
+        "lstm": 1790.27,
+        "lower": 1025.04,
+        "upper": 1025.04
       },
       {
         "datetime": "2026-05-07 23:00:00",
-        "predicted": 705.09,
-        "actual": null
+        "predicted": 795.71,
+        "actual": null,
+        "prophet": 570.92,
+        "xgboost": -193.0,
+        "lstm": 1478.71,
+        "lower": 795.71,
+        "upper": 795.71
       },
       {
         "datetime": "2026-05-08 00:00:00",
-        "predicted": 616.11,
-        "actual": null
+        "predicted": 953.12,
+        "actual": null,
+        "prophet": 763.28,
+        "xgboost": -208.41,
+        "lstm": 1581.82,
+        "lower": 953.12,
+        "upper": 953.12
       },
       {
         "datetime": "2026-05-08 01:00:00",
-        "predicted": 558.25,
-        "actual": null
+        "predicted": 822.3,
+        "actual": null,
+        "prophet": 579.39,
+        "xgboost": -222.37,
+        "lstm": 1576.13,
+        "lower": 822.3,
+        "upper": 822.3
       },
       {
         "datetime": "2026-05-08 02:00:00",
-        "predicted": 485.71,
-        "actual": null
+        "predicted": 735.31,
+        "actual": null,
+        "prophet": 458.39,
+        "xgboost": -143.69,
+        "lstm": 1469.18,
+        "lower": 735.31,
+        "upper": 735.31
       },
       {
         "datetime": "2026-05-08 03:00:00",
-        "predicted": 387.13,
-        "actual": null
+        "predicted": 681.49,
+        "actual": null,
+        "prophet": 405.52,
+        "xgboost": -135.45,
+        "lstm": 1403.99,
+        "lower": 681.49,
+        "upper": 681.49
       },
       {
         "datetime": "2026-05-08 04:00:00",
-        "predicted": 306.43,
-        "actual": null
+        "predicted": 670.26,
+        "actual": null,
+        "prophet": 415.92,
+        "xgboost": -137.05,
+        "lstm": 1350.1,
+        "lower": 670.26,
+        "upper": 670.26
       },
       {
         "datetime": "2026-05-08 05:00:00",
-        "predicted": 306.4,
-        "actual": null
+        "predicted": 674.71,
+        "actual": null,
+        "prophet": 447.73,
+        "xgboost": -141.51,
+        "lstm": 1303.38,
+        "lower": 674.71,
+        "upper": 674.71
       },
       {
         "datetime": "2026-05-08 06:00:00",
-        "predicted": 405.0,
-        "actual": null
+        "predicted": 676.53,
+        "actual": null,
+        "prophet": 459.05,
+        "xgboost": -124.05,
+        "lstm": 1265.68,
+        "lower": 676.53,
+        "upper": 676.53
       },
       {
         "datetime": "2026-05-08 07:00:00",
-        "predicted": 542.94,
-        "actual": null
+        "predicted": 651.67,
+        "actual": null,
+        "prophet": 477.99,
+        "xgboost": -189.56,
+        "lstm": 1225.6,
+        "lower": 651.67,
+        "upper": 651.67
       },
       {
         "datetime": "2026-05-08 08:00:00",
-        "predicted": 616.68,
-        "actual": null
+        "predicted": 848.76,
+        "actual": null,
+        "prophet": 692.8,
+        "xgboost": -26.53,
+        "lstm": 1199.92,
+        "lower": 848.76,
+        "upper": 848.76
       },
       {
         "datetime": "2026-05-08 09:00:00",
-        "predicted": 553.35,
-        "actual": null
+        "predicted": 824.1,
+        "actual": null,
+        "prophet": 593.03,
+        "xgboost": -109.29,
+        "lstm": 1424.34,
+        "lower": 824.1,
+        "upper": 824.1
       },
       {
         "datetime": "2026-05-08 10:00:00",
-        "predicted": 366.63,
-        "actual": null
+        "predicted": 660.6,
+        "actual": null,
+        "prophet": 390.12,
+        "xgboost": -34.06,
+        "lstm": 1255.94,
+        "lower": 660.6,
+        "upper": 660.6
       },
       {
         "datetime": "2026-05-08 11:00:00",
-        "predicted": 148.98,
-        "actual": null
+        "predicted": 511.51,
+        "actual": null,
+        "prophet": 209.99,
+        "xgboost": 23.86,
+        "lstm": 1104.51,
+        "lower": 511.51,
+        "upper": 511.51
       },
       {
         "datetime": "2026-05-08 12:00:00",
-        "predicted": 9.68,
-        "actual": null
+        "predicted": 299.96,
+        "actual": null,
+        "prophet": 15.55,
+        "xgboost": 42.41,
+        "lstm": 836.56,
+        "lower": 299.96,
+        "upper": 299.96
       },
       {
         "datetime": "2026-05-08 13:00:00",
-        "predicted": 10.61,
-        "actual": null
+        "predicted": 343.27,
+        "actual": null,
+        "prophet": 98.92,
+        "xgboost": -27.94,
+        "lstm": 877.84,
+        "lower": 343.27,
+        "upper": 343.27
       },
       {
         "datetime": "2026-05-08 14:00:00",
-        "predicted": 145.73,
-        "actual": null
+        "predicted": 537.89,
+        "actual": null,
+        "prophet": 289.29,
+        "xgboost": -7.37,
+        "lstm": 1057.7,
+        "lower": 537.89,
+        "upper": 537.89
       },
       {
         "datetime": "2026-05-08 15:00:00",
-        "predicted": 366.76,
-        "actual": null
+        "predicted": 633.11,
+        "actual": null,
+        "prophet": 426.67,
+        "xgboost": -113.33,
+        "lstm": 1187.3,
+        "lower": 633.11,
+        "upper": 633.11
       },
       {
         "datetime": "2026-05-08 16:00:00",
-        "predicted": 619.85,
-        "actual": null
+        "predicted": 815.91,
+        "actual": null,
+        "prophet": 645.97,
+        "xgboost": -170.29,
+        "lstm": 1360.11,
+        "lower": 815.91,
+        "upper": 815.91
       },
       {
         "datetime": "2026-05-08 17:00:00",
-        "predicted": 860.42,
-        "actual": null
+        "predicted": 1256.44,
+        "actual": null,
+        "prophet": 866.09,
+        "xgboost": -151.22,
+        "lstm": 2232.27,
+        "lower": 1256.44,
+        "upper": 1256.44
       },
       {
         "datetime": "2026-05-08 18:00:00",
-        "predicted": 1046.31,
-        "actual": null
+        "predicted": 1358.24,
+        "actual": null,
+        "prophet": 1034.38,
+        "xgboost": -228.52,
+        "lstm": 2285.64,
+        "lower": 1358.24,
+        "upper": 1358.24
       },
       {
         "datetime": "2026-05-08 19:00:00",
-        "predicted": 1135.1,
-        "actual": null
+        "predicted": 1330.86,
+        "actual": null,
+        "prophet": 1067.99,
+        "xgboost": -201.29,
+        "lstm": 2101.68,
+        "lower": 1330.86,
+        "upper": 1330.86
       },
       {
         "datetime": "2026-05-08 20:00:00",
-        "predicted": 1102.55,
-        "actual": null
+        "predicted": 1310.96,
+        "actual": null,
+        "prophet": 1082.77,
+        "xgboost": -232.2,
+        "lstm": 2045.74,
+        "lower": 1310.96,
+        "upper": 1310.96
       },
       {
         "datetime": "2026-05-08 21:00:00",
-        "predicted": 967.56,
-        "actual": null
+        "predicted": 1252.92,
+        "actual": null,
+        "prophet": 1003.43,
+        "xgboost": -206.59,
+        "lstm": 2002.26,
+        "lower": 1252.92,
+        "upper": 1252.92
       },
       {
         "datetime": "2026-05-08 22:00:00",
-        "predicted": 792.26,
-        "actual": null
+        "predicted": 1054.96,
+        "actual": null,
+        "prophet": 806.49,
+        "xgboost": -198.39,
+        "lstm": 1792.86,
+        "lower": 1054.96,
+        "upper": 1054.96
       },
       {
         "datetime": "2026-05-08 23:00:00",
-        "predicted": 645.29,
-        "actual": null
+        "predicted": 827.88,
+        "actual": null,
+        "prophet": 613.35,
+        "xgboost": -182.93,
+        "lstm": 1478.26,
+        "lower": 827.88,
+        "upper": 827.88
       },
       {
         "datetime": "2026-05-09 00:00:00",
-        "predicted": 554.85,
-        "actual": null
+        "predicted": 1038.99,
+        "actual": null,
+        "prophet": 875.51,
+        "xgboost": -165.35,
+        "lstm": 1564.24,
+        "lower": 1038.99,
+        "upper": 1038.99
       },
       {
         "datetime": "2026-05-09 01:00:00",
-        "predicted": 494.57,
-        "actual": null
+        "predicted": 917.06,
+        "actual": null,
+        "prophet": 692.78,
+        "xgboost": -197.49,
+        "lstm": 1604.12,
+        "lower": 917.06,
+        "upper": 917.06
       },
       {
         "datetime": "2026-05-09 02:00:00",
-        "predicted": 418.59,
-        "actual": null
+        "predicted": 835.99,
+        "actual": null,
+        "prophet": 572.1,
+        "xgboost": -123.43,
+        "lstm": 1519.9,
+        "lower": 835.99,
+        "upper": 835.99
       },
       {
         "datetime": "2026-05-09 03:00:00",
-        "predicted": 315.51,
-        "actual": null
+        "predicted": 779.33,
+        "actual": null,
+        "prophet": 518.7,
+        "xgboost": -115.19,
+        "lstm": 1447.14,
+        "lower": 779.33,
+        "upper": 779.33
       },
       {
         "datetime": "2026-05-09 04:00:00",
-        "predicted": 229.22,
-        "actual": null
+        "predicted": 742.99,
+        "actual": null,
+        "prophet": 527.72,
+        "xgboost": -112.88,
+        "lstm": 1314.84,
+        "lower": 742.99,
+        "upper": 742.99
       },
       {
         "datetime": "2026-05-09 05:00:00",
-        "predicted": 222.52,
-        "actual": null
+        "predicted": 717.83,
+        "actual": null,
+        "prophet": 557.34,
+        "xgboost": -102.71,
+        "lstm": 1165.37,
+        "lower": 717.83,
+        "upper": 717.83
       },
       {
         "datetime": "2026-05-09 06:00:00",
-        "predicted": 313.39,
-        "actual": null
+        "predicted": 723.89,
+        "actual": null,
+        "prophet": 565.7,
+        "xgboost": -80.74,
+        "lstm": 1141.59,
+        "lower": 723.89,
+        "upper": 723.89
       },
       {
         "datetime": "2026-05-09 07:00:00",
-        "predicted": 442.56,
-        "actual": null
+        "predicted": 691.63,
+        "actual": null,
+        "prophet": 580.96,
+        "xgboost": -164.16,
+        "lstm": 1106.9,
+        "lower": 691.63,
+        "upper": 691.63
       },
       {
         "datetime": "2026-05-09 08:00:00",
-        "predicted": 506.54,
-        "actual": null
+        "predicted": 853.96,
+        "actual": null,
+        "prophet": 791.42,
+        "xgboost": -34.16,
+        "lstm": 1021.67,
+        "lower": 853.96,
+        "upper": 853.96
       },
       {
         "datetime": "2026-05-09 09:00:00",
-        "predicted": 432.52,
-        "actual": null
+        "predicted": 854.33,
+        "actual": null,
+        "prophet": 686.72,
+        "xgboost": -96.04,
+        "lstm": 1308.9,
+        "lower": 854.33,
+        "upper": 854.33
       },
       {
         "datetime": "2026-05-09 10:00:00",
-        "predicted": 234.28,
-        "actual": null
+        "predicted": 689.72,
+        "actual": null,
+        "prophet": 478.38,
+        "xgboost": -20.59,
+        "lstm": 1148.0,
+        "lower": 689.72,
+        "upper": 689.72
       },
       {
         "datetime": "2026-05-09 11:00:00",
-        "predicted": 4.37,
-        "actual": null
+        "predicted": 548.67,
+        "actual": null,
+        "prophet": 292.39,
+        "xgboost": -9.44,
+        "lstm": 1086.65,
+        "lower": 548.67,
+        "upper": 548.67
       },
       {
         "datetime": "2026-05-09 12:00:00",
-        "predicted": -147.81,
-        "actual": null
+        "predicted": 327.22,
+        "actual": null,
+        "prophet": 91.8,
+        "xgboost": 43.7,
+        "lstm": 761.56,
+        "lower": 327.22,
+        "upper": 327.22
       },
       {
         "datetime": "2026-05-09 13:00:00",
-        "predicted": -160.26,
-        "actual": null
+        "predicted": 343.22,
+        "actual": null,
+        "prophet": 168.82,
+        "xgboost": 4.04,
+        "lstm": 697.38,
+        "lower": 343.22,
+        "upper": 343.22
       },
       {
         "datetime": "2026-05-09 14:00:00",
-        "predicted": -38.87,
-        "actual": null
+        "predicted": 518.32,
+        "actual": null,
+        "prophet": 352.74,
+        "xgboost": -20.44,
+        "lstm": 882.31,
+        "lower": 518.32,
+        "upper": 518.32
       },
       {
         "datetime": "2026-05-09 15:00:00",
-        "predicted": 168.23,
-        "actual": null
+        "predicted": 623.07,
+        "actual": null,
+        "prophet": 483.69,
+        "xgboost": -93.09,
+        "lstm": 1016.18,
+        "lower": 623.07,
+        "upper": 623.07
       },
       {
         "datetime": "2026-05-09 16:00:00",
-        "predicted": 407.36,
-        "actual": null
+        "predicted": 782.26,
+        "actual": null,
+        "prophet": 696.71,
+        "xgboost": -154.94,
+        "lstm": 1135.32,
+        "lower": 782.26,
+        "upper": 782.26
       },
       {
         "datetime": "2026-05-09 17:00:00",
-        "predicted": 634.1,
-        "actual": null
+        "predicted": 1025.03,
+        "actual": null,
+        "prophet": 910.79,
+        "xgboost": -135.59,
+        "lstm": 1415.01,
+        "lower": 1025.03,
+        "upper": 1025.03
       },
       {
         "datetime": "2026-05-09 18:00:00",
-        "predicted": 806.48,
-        "actual": null
+        "predicted": 1158.43,
+        "actual": null,
+        "prophet": 1073.43,
+        "xgboost": -207.98,
+        "lstm": 1570.98,
+        "lower": 1158.43,
+        "upper": 1158.43
       },
       {
         "datetime": "2026-05-09 19:00:00",
-        "predicted": 882.25,
-        "actual": null
+        "predicted": 1208.53,
+        "actual": null,
+        "prophet": 1101.88,
+        "xgboost": -184.56,
+        "lstm": 1638.86,
+        "lower": 1208.53,
+        "upper": 1208.53
       },
       {
         "datetime": "2026-05-09 20:00:00",
-        "predicted": 837.36,
-        "actual": null
+        "predicted": 1217.6,
+        "actual": null,
+        "prophet": 1112.08,
+        "xgboost": -201.36,
+        "lstm": 1664.78,
+        "lower": 1217.6,
+        "upper": 1217.6
       },
       {
         "datetime": "2026-05-09 21:00:00",
-        "predicted": 690.89,
-        "actual": null
+        "predicted": 1197.77,
+        "actual": null,
+        "prophet": 1028.87,
+        "xgboost": -168.85,
+        "lstm": 1738.19,
+        "lower": 1197.77,
+        "upper": 1197.77
       },
       {
         "datetime": "2026-05-09 22:00:00",
-        "predicted": 505.15,
-        "actual": null
+        "predicted": 956.2,
+        "actual": null,
+        "prophet": 828.85,
+        "xgboost": -162.7,
+        "lstm": 1404.1,
+        "lower": 956.2,
+        "upper": 956.2
       },
       {
         "datetime": "2026-05-09 23:00:00",
-        "predicted": 348.95,
-        "actual": null
+        "predicted": 646.24,
+        "actual": null,
+        "prophet": 633.52,
+        "xgboost": -160.91,
+        "lstm": 856.3,
+        "lower": 646.24,
+        "upper": 646.24
       },
       {
         "datetime": "2026-05-10 00:00:00",
-        "predicted": 250.68,
-        "actual": null
+        "predicted": 813.76,
+        "actual": null,
+        "prophet": 826.64,
+        "xgboost": -102.43,
+        "lstm": 904.3,
+        "lower": 813.76,
+        "upper": 813.76
       },
       {
         "datetime": "2026-05-10 01:00:00",
-        "predicted": 184.1,
-        "actual": null
+        "predicted": 686.43,
+        "actual": null,
+        "prophet": 643.69,
+        "xgboost": -131.49,
+        "lstm": 924.61,
+        "lower": 686.43,
+        "upper": 686.43
       },
       {
         "datetime": "2026-05-10 02:00:00",
-        "predicted": 103.51,
-        "actual": null
+        "predicted": 571.09,
+        "actual": null,
+        "prophet": 523.86,
+        "xgboost": -50.6,
+        "lstm": 726.06,
+        "lower": 571.09,
+        "upper": 571.09
       },
       {
         "datetime": "2026-05-10 03:00:00",
-        "predicted": -2.36,
-        "actual": null
+        "predicted": 523.34,
+        "actual": null,
+        "prophet": 472.41,
+        "xgboost": -45.46,
+        "lstm": 680.06,
+        "lower": 523.34,
+        "upper": 523.34
       },
       {
         "datetime": "2026-05-10 04:00:00",
-        "predicted": -89.5,
-        "actual": null
+        "predicted": 528.48,
+        "actual": null,
+        "prophet": 484.53,
+        "xgboost": -43.15,
+        "lstm": 668.18,
+        "lower": 528.48,
+        "upper": 528.48
       },
       {
         "datetime": "2026-05-10 05:00:00",
-        "predicted": -95.0,
-        "actual": null
+        "predicted": 562.31,
+        "actual": null,
+        "prophet": 518.39,
+        "xgboost": -19.66,
+        "lstm": 675.13,
+        "lower": 562.31,
+        "upper": 562.31
       },
       {
         "datetime": "2026-05-10 06:00:00",
-        "predicted": -0.83,
-        "actual": null
+        "predicted": 594.66,
+        "actual": null,
+        "prophet": 532.12,
+        "xgboost": 37.58,
+        "lstm": 680.35,
+        "lower": 594.66,
+        "upper": 594.66
       },
       {
         "datetime": "2026-05-10 07:00:00",
-        "predicted": 133.84,
-        "actual": null
+        "predicted": 565.44,
+        "actual": null,
+        "prophet": 553.88,
+        "xgboost": -73.29,
+        "lstm": 672.98,
+        "lower": 565.44,
+        "upper": 565.44
       },
       {
         "datetime": "2026-05-10 08:00:00",
-        "predicted": 205.54,
-        "actual": null
+        "predicted": 748.59,
+        "actual": null,
+        "prophet": 771.91,
+        "xgboost": 20.05,
+        "lstm": 677.7,
+        "lower": 748.59,
+        "upper": 748.59
       },
       {
         "datetime": "2026-05-10 09:00:00",
-        "predicted": 141.5,
-        "actual": null
+        "predicted": 762.16,
+        "actual": null,
+        "prophet": 675.82,
+        "xgboost": -37.54,
+        "lstm": 982.69,
+        "lower": 762.16,
+        "upper": 762.16
       },
       {
         "datetime": "2026-05-10 10:00:00",
-        "predicted": -762.15,
-        "actual": null
+        "predicted": 549.33,
+        "actual": null,
+        "prophet": 477.05,
+        "xgboost": 20.11,
+        "lstm": 675.05,
+        "lower": 549.33,
+        "upper": 549.33
       },
       {
         "datetime": "2026-05-10 11:00:00",
-        "predicted": -977.63,
-        "actual": null
+        "predicted": 412.78,
+        "actual": null,
+        "prophet": 301.52,
+        "xgboost": 35.61,
+        "lstm": 600.95,
+        "lower": 412.78,
+        "upper": 412.78
       },
       {
         "datetime": "2026-05-10 12:00:00",
-        "predicted": -1113.22,
-        "actual": null
+        "predicted": 283.06,
+        "actual": null,
+        "prophet": 112.18,
+        "xgboost": 103.34,
+        "lstm": 516.46,
+        "lower": 283.06,
+        "upper": 283.06
       },
       {
         "datetime": "2026-05-10 13:00:00",
-        "predicted": -1106.98,
-        "actual": null
+        "predicted": 353.28,
+        "actual": null,
+        "prophet": 201.14,
+        "xgboost": 86.12,
+        "lstm": 567.82,
+        "lower": 353.28,
+        "upper": 353.28
       },
       {
         "datetime": "2026-05-10 14:00:00",
-        "predicted": -964.9,
-        "actual": null
+        "predicted": 510.06,
+        "actual": null,
+        "prophet": 397.57,
+        "xgboost": 3.87,
+        "lstm": 737.06,
+        "lower": 510.06,
+        "upper": 510.06
       },
       {
         "datetime": "2026-05-10 15:00:00",
-        "predicted": -17.6,
-        "actual": null
+        "predicted": 650.58,
+        "actual": null,
+        "prophet": 541.48,
+        "xgboost": -72.47,
+        "lstm": 957.83,
+        "lower": 650.58,
+        "upper": 650.58
       },
       {
         "datetime": "2026-05-10 16:00:00",
-        "predicted": 245.84,
-        "actual": null
+        "predicted": 828.32,
+        "actual": null,
+        "prophet": 767.77,
+        "xgboost": -139.82,
+        "lstm": 1112.68,
+        "lower": 828.32,
+        "upper": 828.32
       },
       {
         "datetime": "2026-05-10 17:00:00",
-        "predicted": 498.49,
-        "actual": null
+        "predicted": 1082.96,
+        "actual": null,
+        "prophet": 995.3,
+        "xgboost": -124.66,
+        "lstm": 1405.75,
+        "lower": 1082.96,
+        "upper": 1082.96
       },
       {
         "datetime": "2026-05-10 18:00:00",
-        "predicted": 698.19,
-        "actual": null
+        "predicted": 1217.33,
+        "actual": null,
+        "prophet": 1171.39,
+        "xgboost": -192.74,
+        "lstm": 1532.12,
+        "lower": 1217.33,
+        "upper": 1217.33
       },
       {
         "datetime": "2026-05-10 19:00:00",
-        "predicted": 802.51,
-        "actual": null
+        "predicted": 1253.13,
+        "actual": null,
+        "prophet": 1213.17,
+        "xgboost": -176.36,
+        "lstm": 1536.88,
+        "lower": 1253.13,
+        "upper": 1253.13
       },
       {
         "datetime": "2026-05-10 20:00:00",
-        "predicted": 787.18,
-        "actual": null
+        "predicted": 1254.8,
+        "actual": null,
+        "prophet": 1236.43,
+        "xgboost": -214.39,
+        "lstm": 1537.61,
+        "lower": 1254.8,
+        "upper": 1254.8
       },
       {
         "datetime": "2026-05-10 21:00:00",
-        "predicted": 671.06,
-        "actual": null
+        "predicted": 1231.01,
+        "actual": null,
+        "prophet": 1165.83,
+        "xgboost": -185.97,
+        "lstm": 1577.63,
+        "lower": 1231.01,
+        "upper": 1231.01
       },
       {
         "datetime": "2026-05-10 22:00:00",
-        "predicted": 516.24,
-        "actual": null
+        "predicted": 1026.44,
+        "actual": null,
+        "prophet": 977.84,
+        "xgboost": -186.25,
+        "lstm": 1339.28,
+        "lower": 1026.44,
+        "upper": 1026.44
       },
       {
         "datetime": "2026-05-10 23:00:00",
-        "predicted": 391.29,
-        "actual": null
+        "predicted": 744.12,
+        "actual": null,
+        "prophet": 793.8,
+        "xgboost": -193.31,
+        "lstm": 862.86,
+        "lower": 744.12,
+        "upper": 744.12
       }
     ]
   },
   "last_week_performance": {
     "week": "2026-04-27 - 2026-05-03",
+    "week_start": "2026-04-27",
+    "week_end": "2026-05-03",
     "mape": 196.85,
     "mae": 553.53,
     "rmse": 723.11,
@@ -908,70 +1777,70 @@
       "predicted": 776.94,
       "actual": 0.0,
       "error": 776.94,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 08:00:00",
       "predicted": 871.89,
       "actual": 0.0,
       "error": 871.89,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 09:00:00",
       "predicted": 828.83,
       "actual": 0.0,
       "error": 828.83,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 10:00:00",
       "predicted": 661.01,
       "actual": 0.0,
       "error": 661.01,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 11:00:00",
       "predicted": 460.58,
       "actual": 0.0,
       "error": 460.58,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 12:00:00",
       "predicted": 337.26,
       "actual": 0.0,
       "error": 337.26,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 13:00:00",
       "predicted": 354.07,
       "actual": 0.0,
       "error": 354.07,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 14:00:00",
       "predicted": 505.95,
       "actual": 0.0,
       "error": 505.95,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 15:00:00",
       "predicted": 744.23,
       "actual": 0.0,
       "error": 744.23,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 16:00:00",
       "predicted": 1013.26,
       "actual": 0.0,
       "error": 1013.26,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-27 17:00:00",
@@ -1090,56 +1959,56 @@
       "predicted": 959.58,
       "actual": 0.0,
       "error": 959.58,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 10:00:00",
       "predicted": 767.38,
       "actual": 0.0,
       "error": 767.38,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 11:00:00",
       "predicted": 542.91,
       "actual": 0.0,
       "error": 542.91,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 12:00:00",
       "predicted": 396.11,
       "actual": 0.0,
       "error": 396.11,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 13:00:00",
       "predicted": 390.21,
       "actual": 0.0,
       "error": 390.21,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 14:00:00",
       "predicted": 520.33,
       "actual": 0.0,
       "error": 520.33,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 15:00:00",
       "predicted": 737.99,
       "actual": 0.0,
       "error": 737.99,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 16:00:00",
       "predicted": 987.68,
       "actual": 0.0,
       "error": 987.68,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-28 17:00:00",
@@ -1265,42 +2134,42 @@
       "predicted": 678.89,
       "actual": 0.0,
       "error": 678.89,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-29 11:00:00",
       "predicted": 463.81,
       "actual": 0.0,
       "error": 463.81,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-29 12:00:00",
       "predicted": 326.9,
       "actual": 0.0,
       "error": 326.9,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-29 13:00:00",
       "predicted": 331.24,
       "actual": 0.0,
       "error": 331.24,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-29 14:00:00",
       "predicted": 471.76,
       "actual": 0.0,
       "error": 471.76,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-29 15:00:00",
       "predicted": 699.83,
       "actual": 0.0,
       "error": 699.83,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-29 16:00:00",
@@ -1433,42 +2302,42 @@
       "predicted": 696.64,
       "actual": 0.0,
       "error": 696.64,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-30 11:00:00",
       "predicted": 475.06,
       "actual": 0.0,
       "error": 475.06,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-30 12:00:00",
       "predicted": 331.06,
       "actual": 0.0,
       "error": 331.06,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-30 13:00:00",
       "predicted": 327.85,
       "actual": 0.0,
       "error": 327.85,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-30 14:00:00",
       "predicted": 460.47,
       "actual": 0.0,
       "error": 460.47,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-30 15:00:00",
       "predicted": 680.41,
       "actual": 0.0,
       "error": 680.41,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-04-30 16:00:00",
@@ -1573,77 +2442,77 @@
       "predicted": 134.52,
       "actual": 0.0,
       "error": 134.52,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 07:00:00",
       "predicted": 272.92,
       "actual": 0.0,
       "error": 272.92,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 08:00:00",
       "predicted": 346.87,
       "actual": 0.0,
       "error": 346.87,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 09:00:00",
       "predicted": 283.45,
       "actual": 0.0,
       "error": 283.45,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 10:00:00",
       "predicted": 95.99,
       "actual": 0.0,
       "error": 95.99,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 11:00:00",
       "predicted": -123.28,
       "actual": 0.0,
       "error": 123.28,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 12:00:00",
       "predicted": -264.59,
       "actual": 0.0,
       "error": 264.59,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 13:00:00",
       "predicted": -264.86,
       "actual": 0.0,
       "error": 264.86,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 14:00:00",
       "predicted": -129.14,
       "actual": 0.0,
       "error": 129.14,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 15:00:00",
       "predicted": 93.94,
       "actual": 0.0,
       "error": 93.94,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 16:00:00",
       "predicted": 348.72,
       "actual": 0.0,
       "error": 348.72,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-01 17:00:00",
@@ -1769,42 +2638,42 @@
       "predicted": 457.46,
       "actual": 0.0,
       "error": 457.46,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-02 11:00:00",
       "predicted": 225.89,
       "actual": 0.0,
       "error": 225.89,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-02 12:00:00",
       "predicted": 71.66,
       "actual": 0.0,
       "error": 71.66,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-02 13:00:00",
       "predicted": 57.98,
       "actual": 0.0,
       "error": 57.98,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-02 14:00:00",
       "predicted": 179.95,
       "actual": 0.0,
       "error": 179.95,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-02 15:00:00",
       "predicted": 389.07,
       "actual": 0.0,
       "error": 389.07,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-02 16:00:00",
@@ -1916,63 +2785,63 @@
       "predicted": 347.32,
       "actual": 0.0,
       "error": 347.32,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 08:00:00",
       "predicted": 419.21,
       "actual": 0.0,
       "error": 419.21,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 09:00:00",
       "predicted": 355.06,
       "actual": 0.0,
       "error": 355.06,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 10:00:00",
       "predicted": -558.0,
       "actual": 0.0,
       "error": 558.0,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 11:00:00",
       "predicted": -775.1,
       "actual": 0.0,
       "error": 775.1,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 12:00:00",
       "predicted": -912.7,
       "actual": 0.0,
       "error": 912.7,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 13:00:00",
       "predicted": -907.64,
       "actual": 0.0,
       "error": 907.64,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 14:00:00",
       "predicted": -764.93,
       "actual": 0.0,
       "error": 764.93,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 15:00:00",
       "predicted": 193.11,
       "actual": 0.0,
       "error": 193.11,
-      "error_percent": Infinity
+      "error_percent": 0.0
     },
     {
       "datetime": "2026-05-03 16:00:00",
@@ -2038,7 +2907,8 @@
       "week_end": "2026-05-03",
       "mape": 196.85,
       "mae": 553.53,
-      "rmse": 723.11
+      "rmse": 723.11,
+      "total_predictions": 168
     },
     {
       "week": "2026-04-20 - 2026-04-26",
@@ -2046,7 +2916,8 @@
       "week_end": "2026-04-26",
       "mape": 173.64,
       "mae": 781.0,
-      "rmse": 1015.77
+      "rmse": 1015.77,
+      "total_predictions": 168
     },
     {
       "week": "2026-04-13 - 2026-04-19",
@@ -2054,7 +2925,8 @@
       "week_end": "2026-04-19",
       "mape": 215.73,
       "mae": 825.79,
-      "rmse": 990.92
+      "rmse": 990.92,
+      "total_predictions": 168
     },
     {
       "week": "2026-04-06 - 2026-04-12",
@@ -2062,7 +2934,8 @@
       "week_end": "2026-04-12",
       "mape": 168.76,
       "mae": 931.16,
-      "rmse": 1156.66
+      "rmse": 1156.66,
+      "total_predictions": 144
     },
     {
       "week": "2026-03-30 - 2026-04-05",
@@ -2070,7 +2943,8 @@
       "week_end": "2026-04-05",
       "mape": 261.24,
       "mae": 945.53,
-      "rmse": 1062.29
+      "rmse": 1062.29,
+      "total_predictions": 144
     },
     {
       "week": "2026-03-23 - 2026-03-29",
@@ -2078,7 +2952,8 @@
       "week_end": "2026-03-29",
       "mape": 191.12,
       "mae": 859.62,
-      "rmse": 982.1
+      "rmse": 982.1,
+      "total_predictions": 168
     },
     {
       "week": "2026-03-16 - 2026-03-22",
@@ -2086,7 +2961,8 @@
       "week_end": "2026-03-22",
       "mape": 351.74,
       "mae": 1013.56,
-      "rmse": 1178.08
+      "rmse": 1178.08,
+      "total_predictions": 168
     },
     {
       "week": "2026-03-09 - 2026-03-15",
@@ -2094,7 +2970,8 @@
       "week_end": "2026-03-15",
       "mape": 35.19,
       "mae": 612.02,
-      "rmse": 702.51
+      "rmse": 702.51,
+      "total_predictions": 144
     }
   ]
 }

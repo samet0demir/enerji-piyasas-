@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import type { MCPItem, GenerationItem, ConsumptionItem } from '../types/epias.js';
+import { ensureForecastHistoryComponentColumns } from './schemaMigration.js';
 
 // ES module için __dirname alternatifi
 const __filename = fileURLToPath(import.meta.url);
@@ -126,6 +127,11 @@ export function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_forecast_week ON forecast_history(week_start, week_end);
     CREATE INDEX IF NOT EXISTS idx_forecast_datetime ON forecast_history(forecast_datetime);
   `);
+
+  const addedForecastColumns = ensureForecastHistoryComponentColumns(db);
+  if (addedForecastColumns.length > 0) {
+    console.log(`✅ Migrated forecast_history columns: ${addedForecastColumns.join(', ')}`);
+  }
 
   // Haftalık Performans (Weekly Performance) tablosu
   db.exec(`

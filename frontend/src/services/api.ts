@@ -75,7 +75,7 @@ const API_BASE = 'http://localhost:5001/api';
 export const api = {
   async getForecasts(): Promise<ForecastsResponse> {
     try {
-      const response = await axios.get(FORECASTS_JSON);
+      const response = await axios.get(`${FORECASTS_JSON}?t=${Date.now()}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching forecasts:', error);

@@ -1,0 +1,25 @@
+{
+  "forecast_hours": 168,
+  "min_prediction": 0.0,
+  "max_prediction": 2894.328082545183,
+  "avg_prediction": 522.8845625130441,
+  "invalid_predictions": 0,
+  "model_mae": 253.80423932664158,
+  "seasonal_naive_mae": 568.1158333333334,
+  "baseline_improvement": 0.5532526565269555,
+  "validation_start": "2026-04-27T00:00:00",
+  "validation_end": "2026-05-03T23:00:00",
+  "current_forecast": {
+    "forecast_hours": 168,
+    "min_prediction": 185.62568849965706,
+    "max_prediction": 1389.238948865935,
+    "avg_prediction": 773.3355487101928,
+    "invalid_predictions": 0
+  },
+  "clipped_negative_predictions": 0,
+  "model_type": "Prophet + XGBoost + LSTM Ensemble",
+  "models_count": 3,
+  "last_week_mape": 196.84896933282423,
+  "last_week_mae": 553.5274577122374,
+  "last_week_rmse": 723.106234389302
+}

@@ -2,17 +2,15 @@ name: Weekly Model Training
 
 on:
   schedule:
-    # Her Pazartesi saat 04:00 UTC (07:00 Türkiye saati)
-    # Daily sync (05:00 TRT) bittikten sonra çalışır, en güncel veriyi kullanır
     - cron: '0 4 * * 1'
-
-  # Manuel tetikleme için
   workflow_dispatch:
 
-# Aynı workflow birden fazla çalışmasını önle
 concurrency:
-  group: weekly-training
-  cancel-in-progress: true
+  group: energy-data-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
 
 jobs:
   train-model:
@@ -53,12 +51,17 @@ jobs:
           mkdir -p backend/logs
           mkdir -p backend/models
 
-      - name: Run model training
+      - name: Pull latest branch before training
+        run: git pull --rebase origin main
+
+      - name: Run ensemble model training
         working-directory: ./backend
         run: |
-          echo "Starting weekly model training (Prophet v2)..."
           python src/ml/weekly_workflow_v2.py
-          echo "Training completed!"
+
+      - name: Validate workflow outputs
+        working-directory: ./backend
+        run: npx tsx src/scripts/validateWorkflowOutputs.ts
 
       - name: Check for changes
         id: git-check
@@ -75,13 +78,8 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-
-          # Remote'tan son değişiklikleri çek (eğer başka commit varsa)
-          git pull --rebase origin main || echo "No remote changes to pull"
-
           git commit -m "chore: weekly forecast cycle [skip ci]"
           git push
-          echo "✅ Changes committed and pushed successfully"
 
       - name: Upload logs as artifact
         if: always()
@@ -91,10 +89,13 @@ jobs:
           path: backend/logs/*.log
           retention-days: 30
 
-      - name: Upload model as artifact
+      - name: Upload ensemble model as artifact
         if: steps.git-check.outputs.changed == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: prophet-model-${{ github.run_number }}
-          path: backend/models/prophet_model.json
+          name: ensemble-model-${{ github.run_number }}
+          path: |
+            backend/models/prophet_model.json
+            backend/models/xgboost_residual.joblib
+            backend/models/quality_report.json
           retention-days: 90

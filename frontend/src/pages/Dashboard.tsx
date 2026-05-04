@@ -96,6 +96,7 @@ export function Dashboard() {
     gün: new Date(d.date).toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric' }),
     fiyat: Math.round(d.total / d.count)
   }));
+  void dailyForecastData;
 
   // Saatlik karşılaştırma (tahmin vs gerçek) - TÜM DETAY
   const hourlyComparisonData = data.last_week_comparison.map((item, idx) => ({
@@ -395,7 +396,7 @@ export function Dashboard() {
             if (hasDbComponents || hasJsonComponents) {
               // Bileşen verilerini hazırla
               const componentData = data.current_week.forecasts
-                .filter((f, idx) => idx >= 24 && idx < 120) // 2-5. günler (daha iyi görünüm)
+                .filter((_f, idx) => idx >= 24 && idx < 120) // 2-5. günler (daha iyi görünüm)
                 .map((f: any, idx: number) => ({
                   saat: idx + 25,
                   Ensemble: Math.round(f.predicted || 0),

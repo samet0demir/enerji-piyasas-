@@ -301,12 +301,20 @@ class EnsembleModel:
         predictions = self.predict(future_df)
         
         # Sonuçları DataFrame'e ekle
-        future_df['predicted_price'] = predictions['ensemble_pred']
+        raw_pred = np.asarray(predictions['ensemble_pred'], dtype=float)
+        clipped_pred = np.clip(raw_pred, 0, None)
+        clipped_count = int((raw_pred < 0).sum())
+        if clipped_count > 0:
+            print(f"[!] {clipped_count} negatif ensemble tahmini 0 TRY alt sinirina kirpildi")
+
+        future_df['predicted_price_raw'] = raw_pred
+        future_df['predicted_price'] = clipped_pred
         future_df['prophet_component'] = predictions['prophet_pred']
         future_df['xgboost_component'] = predictions['xgboost_pred']
         future_df['lstm_component'] = predictions['lstm_pred']
-        future_df['lower_bound'] = predictions['yhat_lower']
-        future_df['upper_bound'] = predictions['yhat_upper']
+        future_df['lower_bound'] = np.clip(predictions['yhat_lower'], 0, None)
+        future_df['upper_bound'] = np.clip(predictions['yhat_upper'], 0, None)
+        future_df.attrs['clipped_negative_predictions'] = clipped_count
         
         model_count = predictions['models_used']
         print(f"[+] {len(future_df)} saatlik tahmin oluşturuldu ({model_count} model)")

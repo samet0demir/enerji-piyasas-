@@ -108,7 +108,9 @@ def compare_week(week_start, week_end):
 
     # Mutlak hatalar
     absolute_errors = np.abs(y_true - y_pred)
-    percentage_errors = (absolute_errors / y_true) * 100
+    percentage_errors = np.zeros_like(y_true, dtype=float)
+    non_zero_mask = y_true != 0
+    percentage_errors[non_zero_mask] = (absolute_errors[non_zero_mask] / y_true[non_zero_mask]) * 100
 
     # MAE (Mean Absolute Error)
     mae = np.mean(absolute_errors)
@@ -140,7 +142,7 @@ def compare_week(week_start, week_end):
         conn.execute(update_query, (
             row['price'],
             absolute_errors[idx],
-            percentage_errors[idx],
+            None if not np.isfinite(percentage_errors[idx]) else percentage_errors[idx],
             week_start,
             row['forecast_datetime']
         ))
